@@ -16,3 +16,9 @@ frequently used actions, [WYSIWYM](https://en.wikipedia.org/wiki/WYSIWYM)
 preview, and more.
 
 [Atom]: https://atom.io
+
+## License
+
+Copyright ©‎ David Straka.
+
+Licensed under the [MIT license](LICENSE.txt).
