@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
 
   Specs:
-    name: Atom Specs
+    name: Atom Specs (${{ matrix.os }}, Atom ${{ matrix.atom-channel }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
