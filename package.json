@@ -21,7 +21,7 @@
   },
   "main": "./lib/wootom",
   "engines": {
-    "atom": ">=1.0.0 <2.0.0"
+    "atom": "^1.54.0"
   },
   "activationCommands": {
     "atom-workspace": "wootom:hello"
