@@ -1,6 +1,6 @@
 'use babel';
 
-import wootom from '../lib/wootom';
+import * as wootom from '../lib/wootom';
 
 // Without this: Cannot find name 'waitsForPromise'.ts(2304)
 declare const waitsForPromise: any;
@@ -11,7 +11,8 @@ declare const waitsForPromise: any;
 // or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe('Wootom', () => {
-    let workspaceElement, activationPromise;
+    let workspaceElement: HTMLElement,
+        activationPromise: Promise<any>;
 
     beforeEach(() => {
         workspaceElement = atom.views.getView(atom.workspace);

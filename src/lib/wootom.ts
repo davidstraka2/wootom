@@ -2,29 +2,28 @@
 
 import {CompositeDisposable} from 'atom';
 
-export default {
-    notificationMessage: 'Wootom was called and says hello!',
-    subscriptions: null,
+export const notificationMessage = 'Wootom was called and says hello!';
 
-    activate(state) {
-        // Events subscribed to in atom's system can be easily cleaned up with a
-        // CompositeDisposable
-        this.subscriptions = new CompositeDisposable();
+let subscriptions: CompositeDisposable;
 
-        // Register command that calls hello
-        this.subscriptions.add(atom.commands.add('atom-workspace', {
-            'wootom:hello': () => this.hello(),
-        }));
-    },
+export function activate() {
+    // Events subscribed to in atom's system can be easily cleaned up with a
+    // CompositeDisposable
+    subscriptions = new CompositeDisposable();
 
-    deactivate() {
-        this.subscriptions.dispose();
-    },
+    // Register command that calls hello
+    subscriptions.add(atom.commands.add('atom-workspace', {
+        'wootom:hello': () => hello(),
+    }));
+}
 
-    serialize() {},
+export function deactivate() {
+    subscriptions.dispose();
+}
 
-    hello() {
-        console.log(this.notificationMessage);
-        atom.notifications.addSuccess(this.notificationMessage);
-    },
-};
+export function serialize() {}
+
+export function hello() {
+    console.log(notificationMessage);
+    atom.notifications.addSuccess(notificationMessage);
+}
