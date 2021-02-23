@@ -2,6 +2,9 @@
 
 import wootom from '../lib/wootom';
 
+// Without this: Cannot find name 'waitsForPromise'.ts(2304)
+declare const waitsForPromise: any;
+
 // Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 //
 // To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`

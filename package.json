@@ -25,5 +25,13 @@
   },
   "activationCommands": {
     "atom-workspace": "wootom:hello"
+  },
+  "scripts": {
+    "build": "tsc --build src/lib src/spec"
+  },
+  "devDependencies": {
+    "@types/atom": "^1.40.7",
+    "@types/jasmine": "^3.6.4",
+    "typescript": "^4.1.5"
   }
 }
