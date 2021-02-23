@@ -1,8 +1,6 @@
 {
   "extends": "../../tsconfig-base.json",
-  "references": [
-    {"path": "../lib"}
-  ],
+  "references": [{"path": "../lib"}],
   "compilerOptions": {
     "outDir": "../../spec"
   },

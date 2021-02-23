@@ -15,7 +15,7 @@ Some of the added features are syntax highlighting, a toolbar to aid with
 frequently used actions, [WYSIWYM](https://en.wikipedia.org/wiki/WYSIWYM)
 preview, and more.
 
-[Atom]: https://atom.io
+[atom]: https://atom.io
 
 ## License
 

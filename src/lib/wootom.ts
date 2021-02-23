@@ -12,9 +12,11 @@ export function activate() {
     subscriptions = new CompositeDisposable();
 
     // Register command that calls hello
-    subscriptions.add(atom.commands.add('atom-workspace', {
-        'wootom:hello': () => hello(),
-    }));
+    subscriptions.add(
+        atom.commands.add('atom-workspace', {
+            'wootom:hello': () => hello(),
+        }),
+    );
 }
 
 export function deactivate() {

@@ -3,7 +3,6 @@ name: Test
 on: [push, pull_request]
 
 jobs:
-
   Build:
     name: Build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -12,15 +11,15 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         node-version: [14.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install dependencies
-      run: npm ci
-    - name: Build
-      run: npm run build
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
 
   Specs:
     name: Atom Specs (${{ matrix.os }}, Atom ${{ matrix.atom-channel }})
@@ -31,22 +30,22 @@ jobs:
         node-version: [14.x]
         atom-channel: [stable]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Use Atom ${{ matrix.atom-channel }}
-      uses: UziTech/action-setup-atom@v1
-      with:
-        channel: ${{ matrix.atom-channel }}
-    - name: Atom version
-      run: atom -v
-    - name: APM version
-      run: apm -v
-    - name: Install dependencies
-      run: apm ci
-    - name: Build
-      run: npm run build
-    - name: Run tests
-      run: atom --test spec
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Use Atom ${{ matrix.atom-channel }}
+        uses: UziTech/action-setup-atom@v1
+        with:
+          channel: ${{ matrix.atom-channel }}
+      - name: Atom version
+        run: atom -v
+      - name: APM version
+        run: apm -v
+      - name: Install dependencies
+        run: apm ci
+      - name: Build
+        run: npm run build
+      - name: Run tests
+        run: atom --test spec

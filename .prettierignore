@@ -1,0 +1,11 @@
+# ----------------------------------- Node.js ----------------------------------
+
+node_modules/
+# package-lock.json and package.json are autoformatted by npm
+package-lock.json
+package.json
+
+# ---------------------------- Project build output ----------------------------
+
+/lib/
+/spec/

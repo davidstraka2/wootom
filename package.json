@@ -27,11 +27,14 @@
     "atom-workspace": "wootom:hello"
   },
   "scripts": {
-    "build": "tsc --build src/lib src/spec"
+    "build": "tsc --build src/lib src/spec",
+    "format:apply": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@types/atom": "^1.40.7",
     "@types/jasmine": "^3.6.4",
+    "prettier": "2.2.1",
     "typescript": "^4.1.5"
   }
 }
