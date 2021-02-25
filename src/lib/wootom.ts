@@ -6,7 +6,7 @@ export const notificationMessage = 'Wootom was called and says hello!';
 
 let subscriptions: CompositeDisposable;
 
-export function activate() {
+export function activate(): void {
     // Events subscribed to in atom's system can be easily cleaned up with a
     // CompositeDisposable
     subscriptions = new CompositeDisposable();
@@ -19,13 +19,15 @@ export function activate() {
     );
 }
 
-export function deactivate() {
+export function deactivate(): void {
     subscriptions.dispose();
 }
 
-export function serialize() {}
+export function serialize(): void {
+    // empty
+}
 
-export function hello() {
+export function hello(): void {
     console.log(notificationMessage);
     atom.notifications.addSuccess(notificationMessage);
 }

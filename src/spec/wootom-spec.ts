@@ -1,9 +1,12 @@
 'use babel';
 
 import * as wootom from '../lib/wootom';
+import {Package} from 'atom';
 
 // Without this: Cannot find name 'waitsForPromise'.ts(2304)
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare const waitsForPromise: any;
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 // Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 //
@@ -11,7 +14,7 @@ declare const waitsForPromise: any;
 // or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe('Wootom', () => {
-    let workspaceElement: HTMLElement, activationPromise: Promise<any>;
+    let workspaceElement: HTMLElement, activationPromise: Promise<Package>;
 
     beforeEach(() => {
         workspaceElement = atom.views.getView(atom.workspace);
