@@ -28,8 +28,8 @@
   },
   "scripts": {
     "build": "tsc --build src/lib src/spec",
-    "format:apply": "prettier --write .",
     "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
     "lint:check": "eslint src",
     "lint:fix": "eslint src --fix"
   },
