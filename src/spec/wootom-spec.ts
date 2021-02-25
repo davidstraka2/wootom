@@ -4,9 +4,7 @@ import * as wootom from '../lib/wootom';
 import {Package} from 'atom';
 
 // Without this: Cannot find name 'waitsForPromise'.ts(2304)
-/* eslint-disable @typescript-eslint/no-explicit-any */
-declare const waitsForPromise: any;
-/* eslint-enable @typescript-eslint/no-explicit-any */
+declare function waitsForPromise(fn: () => Promise<any>): void;
 
 // Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 //
@@ -37,7 +35,7 @@ describe('Wootom', () => {
 
             // This is an activation event, triggering it will cause the package
             // to be activated.
-            atom.commands.dispatch(workspaceElement, 'wootom:hello');
+            void atom.commands.dispatch(workspaceElement, 'wootom:hello');
 
             waitsForPromise(() => activationPromise);
 
