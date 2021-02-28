@@ -1,0 +1,46 @@
+{
+  "name": "wootom",
+  "version": "0.1.0",
+  "author": {
+    "name": "David Straka",
+    "email": "davidstraka.public@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/davidstraka2/wootom#readme",
+  "description": "WooWoo Editor for Atom",
+  "keywords": [
+    "WooWoo",
+    "woo"
+  ],
+  "bugs": {
+    "url": "https://github.com/davidstraka2/wootom/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidstraka2/wootom.git"
+  },
+  "main": "./lib/wootom",
+  "engines": {
+    "atom": "^1.54.0"
+  },
+  "activationCommands": {
+    "atom-workspace": "wootom:hello"
+  },
+  "scripts": {
+    "build": "tsc --build src/lib src/spec",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint:check": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --max-warnings=0 --fix"
+  },
+  "devDependencies": {
+    "@types/atom": "^1.40.7",
+    "@types/jasmine": "^3.6.4",
+    "@typescript-eslint/eslint-plugin": "^4.15.2",
+    "@typescript-eslint/parser": "^4.15.2",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^8.1.0",
+    "prettier": "2.2.1",
+    "typescript": "^4.1.5"
+  }
+}
