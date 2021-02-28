@@ -30,8 +30,8 @@
     "build": "tsc --build src/lib src/spec",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "lint:check": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint:check": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --max-warnings=0 --fix"
   },
   "devDependencies": {
     "@types/atom": "^1.40.7",

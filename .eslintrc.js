@@ -18,6 +18,9 @@ module.exports = {
     },
     plugins: ['@typescript-eslint'],
     rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'error',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'error',
+        '@typescript-eslint/no-unused-vars': 'error',
     },
 };
