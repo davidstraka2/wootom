@@ -1,0 +1,146 @@
+name: 'WooWoo'
+scopeName: 'text.woo'
+fileTypes: ['woo']
+limitLineLength: false
+
+patterns: [
+    {include: '#inlineComment'}
+    {include: '#partHeading'}
+    {include: '#object'}
+    {include: '#outerEnvironment'}
+    {include: '#outerEnvironmentFragile'}
+    {include: '#innerEnvironmentShort'}
+    {include: '#innerEnvironmentVerbose'}
+    {include: '#annotation'}
+    {include: '#reference'}
+    {include: '#inlineMath'}
+]
+
+repository:
+    inlineComment: {
+        match: '(?<!%)%.*'
+        name: 'comment.line.woo'
+    }
+    partHeading: {
+        begin: '^\\s*(\\.)([A-Z]\\w*)[^\\S\\r\\n]+.+'
+        beginCaptures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'markup.heading.foo'
+        end: '^\\s*$'
+        patterns: [{include: '#yamlMetablock'}]
+    }
+    yamlMetablock: {
+        patterns: [{include: 'source.yaml'}]
+    }
+    object: {
+        begin: '^\\s*(\\.)([A-Z]\\w*)(:)[^\\S\\r\\n]*$'
+        beginCaptures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'storage.type.foo'
+            3: name: 'keyword.operator.foo'
+        end: '^\\s*$'
+        patterns: [{include: '#yamlMetablock'}]
+    }
+    outerEnvironment: {
+        begin: '^\\s*(\\.)([a-z]\\w*)(:)[^\\S\\r\\n]*$'
+        beginCaptures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'storage.type.foo'
+            3: name: 'keyword.operator.foo'
+        end: '^\\s*$'
+        patterns: [{include: '#yamlMetablock'}]
+    }
+    outerEnvironmentFragile: {
+        begin: '^\\s*(!)([a-z]\\w*)(:)[^\\S\\r\\n]*$'
+        beginCaptures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'storage.type.foo'
+            3: name: 'keyword.operator.foo'
+        end: '^\\s*$'
+        patterns: [{include: '#yamlMetablock'}]
+    }
+    innerEnvironmentShort: {
+        match: '(\\.)([a-z]\\w*)(:)([\\w-]+)'
+        captures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'storage.type.foo'
+            3: name: 'keyword.operator.foo'
+            4: name: 'markup.quote.foo'
+    }
+    innerEnvironmentVerbose: {
+        match: '(")(\\.)([a-z]\\w*)((\\.)(\\d+))?'
+        captures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'keyword.operator.foo'
+            3: name: 'storage.type.foo'
+            5: name: 'keyword.operator.foo'
+            6: name: 'storage.type.foo'
+    }
+    annotation: {
+        match: '(")(\\.)(\\d+)'
+        captures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'keyword.operator.foo'
+            3: name: 'storage.type.foo'
+    }
+    reference: {
+        match: '(")(#)([a-z][\\w-]*)'
+        captures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'keyword.operator.foo'
+            3: name: 'storage.type.foo'
+    }
+    inlineMath: {
+        match: '(\\$)([^$]+)(\\$)'
+        captures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'markup.quote.foo'
+            3: name: 'keyword.operator.foo'
+    }
+
+    # TODO Consistent block (and its metablock) indentation makes this
+    # a non-regular issue
+    #
+    #block: {
+    #    begin: '^[^\\S\\n\\r]*[^\\s].*'
+    #    end: '^\\s*$'
+    #    #name: 'storage.type.foo'
+    #    patterns: [
+    #        {
+    #            begin: '^([^\\S\\n\\r]*)[^\\s].*(\\r?\\n\\1[^\\s].*)*(\\r?\\n\\1\\s+[^\\s].*)*'
+    #            beginCaptures:
+    #                1: 'storage.type.foo'
+    #                3: 'comment.line.woo'
+    #            end: '^\\s*$'
+    #        }
+    #    ]
+    #}
+
+    # TODO Inner environment (and annotation, and reference) nesting makes this
+    # a non-context-free issue
+    #
+    # Consider e.g. the following strings:
+    # `abc "def".label ghi`,
+    # `"abc "def" ghi".label`,
+    # `"abc".label def "dhi".label`,
+    # `"abc "def".label ghi".label.`.
+    # The first and the second string aren't an issue, the third and fourth
+    # strings however are.
+    #
+    #innerEnvironmentVerbose: {
+    #    match: '(")(.*)(")(\\.)([a-z]\\w*)((\\.)(\\d+))?'
+    #    captures:
+    #        1: name: 'keyword.operator.foo'
+    #        2: name: 'markup.quote.foo'
+    #        3: name: 'keyword.operator.foo'
+    #        4: name: 'keyword.operator.foo'
+    #        5: name: 'storage.type.foo'
+    #        7: name: 'keyword.operator.foo'
+    #        8: name: 'storage.type.foo'
+    #    patterns: [
+    #        #{include: '$self'}
+    #        #{include: '#innerEnvironmentShort'}
+    #        #{include: '#innerEnvironmentVerbose'}
+    #        #{include: '#inlineMath'}
+    #    ]
+    #}
