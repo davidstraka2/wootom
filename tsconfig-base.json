@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES6",
+    "module": "CommonJS",
     "allowUnreachableCode": false,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,

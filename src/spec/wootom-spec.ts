@@ -1,5 +1,3 @@
-'use babel';
-
 import * as wootom from '../lib/wootom';
 import {Package} from 'atom';
 

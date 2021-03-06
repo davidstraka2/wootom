@@ -1,5 +1,3 @@
-'use babel';
-
 import {CompositeDisposable} from 'atom';
 
 export const notificationMessage = 'Wootom was called and says hello!';
