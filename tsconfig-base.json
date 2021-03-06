@@ -4,6 +4,7 @@
     "module": "CommonJS",
     "allowUnreachableCode": false,
     "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "strict": true
