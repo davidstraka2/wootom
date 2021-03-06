@@ -1,7 +1,9 @@
 module.exports = {
     root: true,
     env: {
+        browser: true,
         es2021: true,
+        node: true,
     },
     extends: [
         'eslint:recommended',
@@ -9,6 +11,9 @@ module.exports = {
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
         'prettier',
     ],
+    globals: {
+        atom: true,
+    },
     parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaVersion: 12,
@@ -24,4 +29,19 @@ module.exports = {
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unused-vars': 'error',
     },
+
+    overrides: [
+        {
+            files: ['src/spec/**/*'],
+            env: {
+                jasmine: true,
+            },
+            globals: {
+                advanceClock: true,
+                fakeClearInterval: true,
+                fakeSetInterval: true,
+                waitsForPromise: true,
+            },
+        },
+    ],
 };
