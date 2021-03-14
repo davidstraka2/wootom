@@ -22,10 +22,16 @@ repository:
         name: 'comment.line.woo'
     }
     partHeading: {
-        begin: '^\\s*(\\.)([A-Z]\\w*)[^\\S\\r\\n]+.+'
+        begin: '^\\s*(\\.)([A-Z]\\w*)[^\\S\\r\\n]+(.+)'
         beginCaptures:
             1: name: 'keyword.operator.foo'
             2: name: 'markup.heading.foo'
+            3:
+                patterns: [
+                    {include: '#innerEnvironmentShort'}
+                    {include: '#innerEnvironmentVerbose'}
+                    {include: '#inlineMath'}
+                ]
         end: '^\\s*$'
         patterns: [{include: '#yamlMetablock'}]
     }
