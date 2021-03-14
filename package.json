@@ -24,7 +24,10 @@
     "atom": "^1.54.0"
   },
   "activationCommands": {
-    "atom-workspace": "wootom:hello"
+    "atom-workspace": [
+      "wootom:hello",
+      "wootom:demoView"
+    ]
   },
   "scripts": {
     "build": "tsc --build src/lib src/spec",
