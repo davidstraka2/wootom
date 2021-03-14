@@ -40,9 +40,28 @@ jobs:
       - name: Check linting
         run: npm run lint:check
 
+  Style:
+    name: Formatting check (${{ matrix.os }})
+    needs: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Check formatting
+        run: npm run format:check
+
   Pack:
     name: Production package creation
-    needs: Build
+    needs: [Build, Lint, Style]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -65,25 +84,6 @@ jobs:
         with:
           name: dist
           path: dist
-
-  Style:
-    name: Formatting check (${{ matrix.os }})
-    needs: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [14.x]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: npm ci
-      - name: Check formatting
-        run: npm run format:check
 
   Specs:
     name: Atom Specs (${{ matrix.os }}, Atom ${{ matrix.atom-channel }})
