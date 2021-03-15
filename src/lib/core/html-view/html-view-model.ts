@@ -1,4 +1,6 @@
-import {ViewModel, ViewRegistry, Workspace} from 'atom';
+import {ViewModel} from 'atom';
+import {ViewRegistryAdder} from '../atom-abstractions/view-registry-adder';
+import {WorkspaceItemOpener} from '../atom-abstractions/workspace-item-opener';
 
 import {HTMLView} from './html-view';
 
@@ -7,20 +9,20 @@ export class HTMLViewModel implements ViewModel {
     /**
      * @param title The title of the HTML View pane item
      * @param view The view to use for the model
-     * @param viewRegistry Atom's ViewRegistry to use to connect the model layer
-     * with the view layer
-     * @param workspace To be used to open a new pane with the view
+     * @param viewRegistryAdder Used to connect the model layer with the view
+     * layer
+     * @param workspaceItemOpener To be used to open a new pane with the view
      */
     constructor(
         private title: string,
-        private readonly view: HTMLView,
-        private readonly viewRegistry: ViewRegistry,
-        private readonly workspace: Workspace,
+        private readonly view: Required<HTMLView>,
+        private readonly viewRegistryAdder: ViewRegistryAdder,
+        private readonly workspaceItemOpener: WorkspaceItemOpener,
     ) {}
 
     /** Activate the model; register it and its view with the ViewRegistry */
     activate(): void {
-        this.viewRegistry.addViewProvider(HTMLViewModel, () =>
+        this.viewRegistryAdder.addViewProvider(HTMLViewModel, () =>
             this.view.render(),
         );
     }
@@ -47,7 +49,7 @@ export class HTMLViewModel implements ViewModel {
      */
     async render(content: Node): Promise<void> {
         this.view.updateContent(content);
-        await this.workspace.open(this, {
+        await this.workspaceItemOpener.open(this, {
             split: 'right',
             searchAllPanes: true,
         });
