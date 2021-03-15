@@ -1,9 +1,6 @@
 import * as wootom from '../lib/wootom';
 import {Package} from 'atom';
 
-// Without this: Cannot find name 'waitsForPromise'.ts(2304)
-declare function waitsForPromise(fn: () => Promise<any>): void;
-
 // Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 //
 // To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
@@ -18,7 +15,7 @@ describe('Wootom', () => {
     });
 
     describe('when the wootom:hello event is triggered', () => {
-        it('shows a notification', () => {
+        it('shows a notification', async () => {
             // List all past notifications
             const listNotificationMessages = () =>
                 atom.notifications
@@ -35,13 +32,11 @@ describe('Wootom', () => {
             // to be activated.
             void atom.commands.dispatch(workspaceElement, 'wootom:hello');
 
-            waitsForPromise(() => activationPromise);
+            await activationPromise;
 
-            runs(() => {
-                expect(listNotificationMessages()).toContain(
-                    wootom.notificationMessage,
-                );
-            });
+            expect(listNotificationMessages()).toContain(
+                wootom.notificationMessage,
+            );
         });
     });
 });

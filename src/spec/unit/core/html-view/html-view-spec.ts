@@ -12,7 +12,7 @@ describe('HTMLView', () => {
         const container = document.createElement('div');
         container.classList.add('wootom-html-viewer');
         container.style.setProperty('overflow-y', 'auto');
-        expect(container.isEqualNode(result)).toBe(true);
+        expect(container.isEqualNode(result)).toBeTrue();
     });
 
     it('renders container element with text node when given a text node', () => {
@@ -29,7 +29,7 @@ describe('HTMLView', () => {
         container.classList.add('wootom-html-viewer');
         container.style.setProperty('overflow-y', 'auto');
         container.appendChild(document.createTextNode('Test'));
-        expect(container.isEqualNode(result)).toBe(true);
+        expect(container.isEqualNode(result)).toBeTrue();
     });
 
     it('renders container element with complex components', () => {
@@ -58,7 +58,7 @@ describe('HTMLView', () => {
         container.classList.add('wootom-html-viewer');
         container.style.setProperty('overflow-y', 'auto');
         container.appendChild(createContent());
-        expect(container.isEqualNode(result)).toBe(true);
+        expect(container.isEqualNode(result)).toBeTrue();
     });
 
     it('is able to change and update its content', () => {
@@ -76,6 +76,6 @@ describe('HTMLView', () => {
         container.classList.add('wootom-html-viewer');
         container.style.setProperty('overflow-y', 'auto');
         container.appendChild(document.createTextNode('Test #2'));
-        expect(container.isEqualNode(result)).toBe(true);
+        expect(container.isEqualNode(result)).toBeTrue();
     });
 });
