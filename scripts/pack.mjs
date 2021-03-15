@@ -23,7 +23,6 @@ await mkdirs(distDir);
 await Promise.all([
     cp('grammars/'),
     cp('lib/'),
-    cp('spec/'),
     cp('.gitattributes'),
     cp('.gitignore-dist', '.gitignore'),
     cp('CHANGELOG.md'),
