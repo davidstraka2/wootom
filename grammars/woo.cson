@@ -14,6 +14,7 @@ patterns: [
     {include: '#annotation'}
     {include: '#reference'}
     {include: '#inlineMath'}
+    {include: '#tailMetablocks'}
 ]
 
 repository:
@@ -22,10 +23,16 @@ repository:
         name: 'comment.line.woo'
     }
     partHeading: {
-        begin: '^\\s*(\\.)([A-Z]\\w*)[^\\S\\r\\n]+.+'
+        begin: '^\\s*(\\.)([A-Z]\\w*)[^\\S\\r\\n]+(.+)'
         beginCaptures:
             1: name: 'keyword.operator.foo'
             2: name: 'markup.heading.foo'
+            3:
+                patterns: [
+                    {include: '#innerEnvironmentShort'}
+                    {include: '#innerEnvironmentVerbose'}
+                    {include: '#inlineMath'}
+                ]
         end: '^\\s*$'
         patterns: [{include: '#yamlMetablock'}]
     }
@@ -97,9 +104,21 @@ repository:
             2: name: 'markup.quote.foo'
             3: name: 'keyword.operator.foo'
     }
+    tailMetablocks: {
+        # Inherently flawed (see comments below), but at least some implementation
+        begin: '^[^\\S\\r\\n]{2,}(\\w+)(:)'
+        beginCaptures:
+            1: name: 'entity.name.tag.yaml'
+            2: name: 'punctuation.separator.key-value.yaml'
+        end: '^\\s*$'
+        patterns: [
+            {include: '#inlineMath'}
+            {include: '#yamlMetablock'}
+        ]
+    }
 
     # TODO Consistent block (and its metablock) indentation makes this
-    # a non-regular issue
+    # a non-context-free issue
     #
     #block: {
     #    begin: '^[^\\S\\n\\r]*[^\\s].*'
@@ -117,7 +136,7 @@ repository:
     #}
 
     # TODO Inner environment (and annotation, and reference) nesting makes this
-    # a non-context-free issue
+    # a non-regular-free issue
     #
     # Consider e.g. the following strings:
     # `abc "def".label ghi`,
