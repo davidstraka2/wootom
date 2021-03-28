@@ -19,7 +19,7 @@ patterns: [
 
 repository:
     inlineComment: {
-        match: '(?<!%)%.*'
+        match: '^%.*'
         name: 'comment.line.woo'
     }
     partHeading: {
