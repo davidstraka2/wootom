@@ -4,6 +4,7 @@ import {
     getEndingNewlineLength,
     getEndingNewline,
     trimEndingNewline,
+    trimIndentation,
 } from '../../../../lib/util/text/multiline';
 
 describe('countLines', () => {
@@ -365,5 +366,40 @@ describe('trimEndingNewline', () => {
 
         // -- Assert
         expect(trimmedInput).toEqual('Lorem\nipsum\ndolor\nsit\namet.');
+    });
+});
+
+describe('trimIndentation', () => {
+    it('Trims indentation from a consistently indented multiline text (#1)', () => {
+        // -- Arrange
+        const input = '  Lorem\n  ipsum\n  dolor sit\n  amet.\n';
+
+        // -- Act
+        const trimmedInput = trimIndentation(input, 2);
+
+        // -- Assert
+        expect(trimmedInput).toEqual('Lorem\nipsum\ndolor sit\namet.\n');
+    });
+
+    it('Trims indentation from a consistently indented multiline text (#2)', () => {
+        // -- Arrange
+        const input = '  Lorem\n  ipsum\n  dolor sit\n  amet.\n';
+
+        // -- Act
+        const trimmedInput = trimIndentation(input, 1);
+
+        // -- Assert
+        expect(trimmedInput).toEqual(' Lorem\n ipsum\n dolor sit\n amet.\n');
+    });
+
+    it('Trims indentation from an inconsistently indented multiline text', () => {
+        // -- Arrange
+        const input = 'Lorem\n  ipsum\n    dolor sit\n  amet.\n';
+
+        // -- Act
+        const trimmedInput = trimIndentation(input, 2);
+
+        // -- Assert
+        expect(trimmedInput).toEqual('Lorem\nipsum\n  dolor sit\namet.\n');
     });
 });

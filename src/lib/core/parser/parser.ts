@@ -1,6 +1,10 @@
 import {parse as parseYAML} from 'yaml';
 import {eol} from '../../util/regex-patterns/sequences';
-import {getEndingNewline, trimEndingNewline} from '../../util/text/multiline';
+import {
+    getEndingNewline,
+    trimEndingNewline,
+    trimIndentation,
+} from '../../util/text/multiline';
 import {ASTNode} from '../ast/ast-node';
 import {ASTNodePosition} from '../ast/ast-node-position';
 import {DocumentPart} from '../ast/document-part';
@@ -183,9 +187,22 @@ export class Parser {
         const match = matcher.findFirstMatch(source);
         const {before, after} = match ?? {before: source, after: ''};
         const end = ASTNodePosition.getEnd(start, before);
+        const trimmedContent = trimIndentation(before, start.column - 1);
+        const metablockMatcher = new SimpleMatcher(
+            new RegExp(`^${regex.yamlMetablock}`, 'm'),
+        );
+        const metablockMatch = metablockMatcher.findFirstMatch(trimmedContent);
+        const metablock = metablockMatch?.matched ?? '';
+        let content = before;
+        if (metablock.length > 0)
+            content = trimEndingNewline(before.slice(0, -metablock.length));
         const textBlock = new TextBlock(false, start, end, parent);
+        const metadata = this.parseMetablock(metablock);
+        Object.keys(metadata).forEach(key =>
+            textBlock.setMetadata(key, metadata[key]),
+        );
         textBlock.addChildren(
-            ...this.parseInlineContent(start, textBlock, before),
+            ...this.parseInlineContent(start, textBlock, content),
         );
         return {parsed: textBlock, after: `${match?.matched ?? ''}${after}`};
     }

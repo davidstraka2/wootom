@@ -172,7 +172,7 @@ Duis leo tellus, elementum iaculis diam eu, vestibulum ultrices lectus.`;
         expect(allChildrenHaveCorrectParents(root)).toBeTrue();
     });
 
-    it('parses a simple WooWoo document with document parts, blocks, and metablocks', () => {
+    it('Parses a simple WooWoo document with document parts with metablocks, and text blocks', () => {
         // -- Arrange
         const woowooSource = `
 .Chapter The First Chapter
@@ -280,6 +280,129 @@ Duis leo tellus, elementum iaculis diam eu, vestibulum ultrices lectus.`;
                 textBlock3,
             ),
         );
+        expectedRoot.addChildren(textBlock3);
+
+        // -- Act
+        const root = parser.parse(woowooSource);
+
+        // -- Assert
+        expect(expectedRoot.equals(root)).toBeTrue();
+        expect(root.parent).toBeUndefined();
+        expect(allChildrenHaveCorrectParents(root)).toBeTrue();
+    });
+
+    it('Parses a simple WooWoo document with document parts, and text blocks with metablocks', () => {
+        // -- Arrange
+        const woowooSource = `
+.Chapter The First Chapter
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at
+imperdiet felis. Donec cursus, ex sed tristique varius, purus felis maximus
+lectus, a sagittis nulla nibh eget ex.
+
+
+.Section The First Section of the First Chapter
+
+Duis viverra massa vel mauris venenatis, et dapibus nisi maximus. Integer sed mi
+turpis. Praesent at congue eros. Sed eu erat magna. Nunc ante nulla, tincidunt
+ut quam ac, placerat aliquet risus.
+  1:
+    link: http://example.com/1
+  2:
+    link: http://example.com/2
+
+
+Duis leo tellus, elementum iaculis diam eu, vestibulum ultrices lectus.
+  only: html`;
+        const expectedRoot = new DocumentRoot({
+            line: 21,
+            column: 13,
+            offset: 621,
+        });
+        const chapterPart = new DocumentPart(
+            'Chapter',
+            {line: 2, column: 1, offset: 1},
+            {line: 2, column: 27, offset: 27},
+            expectedRoot,
+        );
+        chapterPart.addChildren(
+            new TextNode(
+                'The First Chapter',
+                false,
+                {line: 2, column: 10, offset: 10},
+                chapterPart,
+            ),
+        );
+        expectedRoot.addChildren(chapterPart);
+        const textBlock1 = new TextBlock(
+            false,
+            {line: 4, column: 1, offset: 29},
+            {line: 6, column: 39, offset: 215},
+            expectedRoot,
+        );
+        textBlock1.addChildren(
+            new TextNode(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+                    ' Suspendisse at\nimperdiet felis. Donec cursus, ex sed' +
+                    ' tristique varius, purus felis maximus\nlectus, a' +
+                    ' sagittis nulla nibh eget ex.',
+                false,
+                {line: 4, column: 1, offset: 29},
+                textBlock1,
+            ),
+        );
+        expectedRoot.addChildren(textBlock1);
+        const sectionPart = new DocumentPart(
+            'Section',
+            {line: 9, column: 1, offset: 218},
+            {line: 9, column: 48, offset: 265},
+            expectedRoot,
+        );
+        sectionPart.addChildren(
+            new TextNode(
+                'The First Section of the First Chapter',
+                false,
+                {line: 9, column: 10, offset: 227},
+                sectionPart,
+            ),
+        );
+        expectedRoot.addChildren(sectionPart);
+        const textBlock2 = new TextBlock(
+            false,
+            {line: 11, column: 1, offset: 267},
+            {line: 17, column: 31, offset: 534},
+            expectedRoot,
+        );
+        textBlock2.addChildren(
+            new TextNode(
+                'Duis viverra massa vel mauris venenatis, et dapibus nisi' +
+                    ' maximus. Integer sed mi\nturpis. Praesent at congue' +
+                    ' eros. Sed eu erat magna. Nunc ante nulla, tincidunt\nut' +
+                    ' quam ac, placerat aliquet risus.',
+                false,
+                {line: 11, column: 1, offset: 267},
+                textBlock2,
+            ),
+        );
+        textBlock2.setMetadata('1', {link: 'http://example.com/1'});
+        textBlock2.setMetadata('2', {link: 'http://example.com/2'});
+        expectedRoot.addChildren(textBlock2);
+        const textBlock3 = new TextBlock(
+            false,
+            {line: 20, column: 1, offset: 537},
+            {line: 21, column: 13, offset: 621},
+            expectedRoot,
+        );
+        textBlock3.addChildren(
+            new TextNode(
+                'Duis leo tellus, elementum iaculis diam eu, vestibulum' +
+                    ' ultrices lectus.',
+                false,
+                {line: 20, column: 1, offset: 537},
+                textBlock3,
+            ),
+        );
+        textBlock3.setMetadata('only', 'html');
         expectedRoot.addChildren(textBlock3);
 
         // -- Act

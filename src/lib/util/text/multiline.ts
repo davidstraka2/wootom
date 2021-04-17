@@ -1,3 +1,5 @@
+import {horizontalWhitespace} from '../regex-patterns/charsets';
+
 /**
  * Count the number of lines of a given text
  *
@@ -76,4 +78,57 @@ export function trimEndingNewline(text: string): string {
     const newlineLength = getEndingNewlineLength(text);
     if (newlineLength === 0) return text;
     return text.slice(0, -newlineLength);
+}
+
+/**
+ * Trim indentation of up to a given length from text
+ *
+ * @param text The input text
+ * @param indentationLength The maximum length (per line) of the indentation to
+ * be trimmed
+ * @returns The input text without the indentation
+ * @throws {RangeError} When `indentationLength` is less than 0
+ *
+ * @example
+ * ```ts
+ * trimIndentation('Lorem ipsum', 2) // 'Lorem ipsum'
+ * trimIndentation('  Lorem\n  ipsum\n', 2) // 'Lorem\nipsum\n'
+ * trimIndentation('  Lorem\n  ipsum\n', 1) // ' Lorem\n ipsum\n'
+ * trimIndentation('  Lorem\n    ipsum\n', 2) // 'Lorem\n  ipsum\n'
+ * ```
+ */
+export function trimIndentation(
+    text: string,
+    indentationLength: number,
+): string {
+    if (indentationLength < 0)
+        throw new RangeError('Argument indentationLength must be >= 0.');
+    const lines = text.split('\n');
+    const trimmedLines = lines.map(line => {
+        const lineIndentationLength = getLineIndentationLength(
+            line,
+            indentationLength,
+        );
+        return line.slice(lineIndentationLength);
+    });
+    return trimmedLines.join('\n');
+}
+
+/**
+ * Get the length of the indentation up to a given max of a given line of text
+ *
+ * @param line The input line of text
+ * @param max The maximum length of the indentation to get, or -1/`undefined` for
+ * no maximum length
+ * @returns The length of the indentation of the input text
+ */
+function getLineIndentationLength(line: string, max = -1): number {
+    const indentationRegex = new RegExp(horizontalWhitespace);
+    if (max < 0) max = line.length;
+    let i = 0;
+    while (i < max) {
+        if (!indentationRegex.test(line.charAt(i))) break;
+        i++;
+    }
+    return i;
 }
