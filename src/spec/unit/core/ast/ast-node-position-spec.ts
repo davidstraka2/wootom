@@ -44,8 +44,6 @@ describe('ASTNodePosition', () => {
             expect(end.offset).toEqual(31);
         });
 
-        // TODO
-
         it('Gets the end position of a given multiline LF text', () => {
             // -- Arrange
             const start = new ASTNodePosition(1, 2, 3);

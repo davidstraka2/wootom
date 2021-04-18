@@ -1,16 +1,23 @@
 import {parse as parseYAML} from 'yaml';
+import {Stack} from '../../util/containers/stack';
+import {horizontalWhitespace} from '../../util/regex-patterns/charsets';
 import {eol} from '../../util/regex-patterns/sequences';
 import {
     getEndingNewline,
     trimEndingNewline,
     trimIndentation,
 } from '../../util/text/multiline';
+import {WooElementKind} from '../../util/types/woo';
 import {ASTNode} from '../ast/ast-node';
 import {ASTNodePosition} from '../ast/ast-node-position';
+import {DocumentObject} from '../ast/document-object';
 import {DocumentPart} from '../ast/document-part';
 import {DocumentRoot} from '../ast/document-root';
+import {IndentedBlock} from '../ast/indented-block';
+import {OuterEnv} from '../ast/outer-env';
 import {TextBlock} from '../ast/text-block';
 import {TextNode} from '../ast/text-node';
+import {Matcher} from './matchers/matcher';
 import {SimpleMatcher} from './matchers/simple-matcher';
 import * as regex from './regex-patterns/woo';
 
@@ -20,6 +27,21 @@ type ParseResult<T extends ASTNode> = {
     /** Non-parsed source remainder */
     after: string;
 };
+
+const metablockMatcher = new SimpleMatcher(
+    new RegExp(`^${regex.yamlMetablock}`, 'm'),
+);
+const documentPartMatcher = new SimpleMatcher(new RegExp(regex.documentPart));
+const documentObjectMatcher = new SimpleMatcher(
+    new RegExp(regex.documentObject),
+);
+const outerEnvMatcher = new SimpleMatcher(new RegExp(regex.outerEnv));
+const fragileOuterEnvMatcher = new SimpleMatcher(
+    new RegExp(regex.fragileOuterEnv),
+);
+const textBlockSeparatorMatcher = new SimpleMatcher(
+    new RegExp(`${eol}${horizontalWhitespace}*${eol}`),
+);
 
 /** Parses a WooWoo document into a WooWoo AST */
 export class Parser {
@@ -32,7 +54,7 @@ export class Parser {
     parse(source: string): ASTNode {
         const start = new ASTNodePosition(1, 1, 0);
         const root = new DocumentRoot(ASTNodePosition.getEnd(start, source));
-        root.addChildren(...this.parseBlockContent(start, root, source));
+        this.parseBlockContent(start, root, source);
         return root;
     }
 
@@ -49,10 +71,15 @@ export class Parser {
         start: ASTNodePosition,
         parent: ASTNode,
         source: string,
-    ): ASTNode[] {
-        const content: ASTNode[] = [];
+    ): void {
+        const scope = new Stack<ASTNode>();
         let remainingSource = source;
+        let prevRemainderLength;
         while (remainingSource.length > 0) {
+            if (remainingSource.length === prevRemainderLength)
+                throw new Error('Unknown error in parsing');
+            prevRemainderLength = remainingSource.length;
+
             const trimmedRemainder = remainingSource.trimLeft();
             if (trimmedRemainder !== remainingSource) {
                 const whitespaceTrimmed = remainingSource.slice(
@@ -63,27 +90,40 @@ export class Parser {
                 start = ASTNodePosition.getEnd(start, whitespaceTrimmed);
                 continue;
             }
-            const documentPart = this.parseDocumentPart(
-                start,
-                parent,
-                remainingSource,
-            );
-            if (typeof documentPart !== 'undefined') {
-                content.push(documentPart.parsed);
-                remainingSource = documentPart.after;
-                start = documentPart.parsed.end;
-                continue;
+
+            scope.popWhile(node => start.column <= node.startColumn);
+            const realParent = scope.top ?? parent;
+
+            const unscoped: WooElementKind[] = [
+                'DocumentPart',
+                'IndentedBlock',
+                'TextBlock',
+            ];
+            const parsingSteps = [
+                this.parseFragileOuterEnvContent.bind(this),
+                this.parseDocumentPart.bind(this),
+                this.parseDocumentObject.bind(this),
+                this.parseFragileOuterEnv.bind(this),
+                this.parseOuterEnv.bind(this),
+                this.parseIndentedBlock.bind(this),
+                this.parseTextBlock.bind(this),
+            ];
+            for (const parsingStep of parsingSteps) {
+                const parsingResult = parsingStep(
+                    start,
+                    realParent,
+                    remainingSource,
+                );
+                if (typeof parsingResult !== 'undefined') {
+                    const {parsed, after} = parsingResult;
+                    if (!unscoped.includes(parsed.kind)) scope.push(parsed);
+                    realParent.addChildren(parsed);
+                    remainingSource = after;
+                    start = parsed.end;
+                    break;
+                }
             }
-            const textBlock = this.parseTextBlock(
-                start,
-                parent,
-                remainingSource,
-            );
-            content.push(textBlock.parsed);
-            remainingSource = textBlock.after;
-            start = textBlock.parsed.end;
         }
-        return content;
     }
 
     /**
@@ -134,8 +174,7 @@ export class Parser {
         parent: ASTNode,
         source: string,
     ): ParseResult<DocumentPart> | undefined {
-        const matcher = new SimpleMatcher(new RegExp(regex.documentPart));
-        const match = matcher.findFirstMatch(source);
+        const match = documentPartMatcher.findFirstMatch(source);
         if (typeof match === 'undefined' || match.index !== 0) {
             return;
         }
@@ -171,6 +210,190 @@ export class Parser {
     }
 
     /**
+     * Parse a document object
+     *
+     * @param start The position of the start of the document object
+     * @param parent The parent node of the document object
+     * @param source The source of the document object to be parsed
+     * @returns A new document object along with the non-parsed source
+     * remainder; or `undefined` if no document object could be parsed
+     */
+    private parseDocumentObject(
+        start: ASTNodePosition,
+        parent: ASTNode,
+        source: string,
+    ): ParseResult<DocumentObject> | undefined {
+        return this.parseDocumentObjectOrOuterEnv(
+            start,
+            parent,
+            source,
+            documentObjectMatcher,
+            DocumentObject,
+        );
+    }
+
+    /**
+     * Parse an outer environment
+     *
+     * @param start The position of the start of the outer environment
+     * @param parent The parent node of the outer environment
+     * @param source The source of the outer environment to be parsed
+     * @returns A new outer environment along with the non-parsed source
+     * remainder; or `undefined` if no outer environment could be parsed
+     */
+    private parseOuterEnv(
+        start: ASTNodePosition,
+        parent: ASTNode,
+        source: string,
+    ): ParseResult<OuterEnv> | undefined {
+        return this.parseDocumentObjectOrOuterEnv(
+            start,
+            parent,
+            source,
+            outerEnvMatcher,
+            OuterEnv,
+        );
+    }
+
+    private parseDocumentObjectOrOuterEnv<T extends ASTNode>(
+        start: ASTNodePosition,
+        parent: ASTNode,
+        source: string,
+        matcher: Matcher,
+        NodeConstructor: new (
+            variant: string,
+            isFragile: boolean,
+            start: ASTNodePosition,
+            end: ASTNodePosition,
+            parent?: ASTNode,
+        ) => T,
+    ): ParseResult<T> | undefined {
+        const match = matcher.findFirstMatch(source);
+        if (typeof match === 'undefined' || match.index !== 0) {
+            return;
+        }
+        const [variant, metablock] = match.groups;
+        if (typeof variant === 'undefined')
+            throw new Error('Unknown error in parsing.');
+        const end = ASTNodePosition.getEnd(
+            start,
+            trimEndingNewline(match.matched),
+        );
+        const node = new NodeConstructor(variant, false, start, end, parent);
+        const metadata = this.parseMetablock(metablock);
+        Object.keys(metadata).forEach(key =>
+            node.setMetadata(key, metadata[key]),
+        );
+        return {
+            parsed: node,
+            after: `${getEndingNewline(match.matched)}${match.after}`,
+        };
+    }
+
+    /**
+     * Parse a fragile outer environment
+     *
+     * @param start The position of the start of the fragile outer environment
+     * @param parent The parent node of the fragile outer environment
+     * @param source The source of the fragile outer environment to be parsed
+     * @returns A new fragile outer environment along with the non-parsed source
+     * remainder; or `undefined` if no fragile outer environment could be parsed
+     */
+    private parseFragileOuterEnv(
+        start: ASTNodePosition,
+        parent: ASTNode,
+        source: string,
+    ): ParseResult<OuterEnv> | undefined {
+        const match = fragileOuterEnvMatcher.findFirstMatch(source);
+        if (typeof match === 'undefined' || match.index !== 0) {
+            return;
+        }
+        const [variant, metablock] = match.groups;
+        if (typeof variant === 'undefined')
+            throw new Error('Unknown error in parsing.');
+        const end = ASTNodePosition.getEnd(
+            start,
+            trimEndingNewline(match.matched),
+        );
+        const node = new OuterEnv(variant, true, start, end, parent);
+        const metadata = this.parseMetablock(metablock);
+        Object.keys(metadata).forEach(key =>
+            node.setMetadata(key, metadata[key]),
+        );
+        return {
+            parsed: node,
+            after: `${getEndingNewline(match.matched)}${match.after}`,
+        };
+    }
+
+    /**
+     * Parse the content of a fragile outer environment
+     *
+     * @param start The position of the start of the content
+     * @param parent The parent node of the content
+     * @param source The source of the content to be parsed
+     * @returns A new text node along with the non-parsed source remainder
+     */
+    private parseFragileOuterEnvContent(
+        start: ASTNodePosition,
+        parent: ASTNode,
+        source: string,
+    ): ParseResult<TextBlock> | undefined {
+        if (!parent.isFragile) return;
+        const match = textBlockSeparatorMatcher.findFirstMatch(source);
+        const {before, after} = match ?? {before: source, after: ''};
+        const end = ASTNodePosition.getEnd(start, before);
+        const content = trimIndentation(before, start.column - 1);
+        const textBlock = new TextBlock(true, start, end, parent);
+        textBlock.addChildren(new TextNode(content, true, start, textBlock));
+        return {
+            parsed: textBlock,
+            after: `${match?.matched ?? ''}${after}`,
+        };
+    }
+
+    /**
+     * Parse an indented block
+     *
+     * @param start The position of the start of the indented block
+     * @param parent The parent node of the indented block
+     * @param source The source of the indented block to be parsed
+     * @returns A new indented block along with the non-parsed source remainder
+     */
+    private parseIndentedBlock(
+        start: ASTNodePosition,
+        parent: ASTNode,
+        source: string,
+    ): ParseResult<IndentedBlock> | undefined {
+        if (
+            parent.children.length === 0 ||
+            start.column <= parent.children[0].startColumn
+        ) {
+            return;
+        }
+        const match = textBlockSeparatorMatcher.findFirstMatch(source);
+        const {before, after} = match ?? {before: source, after: ''};
+        const end = ASTNodePosition.getEnd(start, before);
+        let content = trimIndentation(before, start.column - 1);
+        const metablockMatch = metablockMatcher.findFirstMatch(content);
+        const metablock = metablockMatch?.matched ?? '';
+        if (metablock.length > 0)
+            content = trimEndingNewline(content.slice(0, -metablock.length));
+        const indentedBlock = new IndentedBlock(false, start, end, parent);
+        const metadata = this.parseMetablock(metablock);
+        Object.keys(metadata).forEach(key =>
+            indentedBlock.setMetadata(key, metadata[key]),
+        );
+        indentedBlock.addChildren(
+            ...this.parseInlineContent(start, indentedBlock, content),
+        );
+        return {
+            parsed: indentedBlock,
+            after: `${match?.matched ?? ''}${after}`,
+        };
+    }
+
+    /**
      * Parse a text block
      *
      * @param start The position of the start of the text block
@@ -183,19 +406,14 @@ export class Parser {
         parent: ASTNode,
         source: string,
     ): ParseResult<TextBlock> {
-        const matcher = new SimpleMatcher(new RegExp(eol.repeat(2)));
-        const match = matcher.findFirstMatch(source);
+        const match = textBlockSeparatorMatcher.findFirstMatch(source);
         const {before, after} = match ?? {before: source, after: ''};
         const end = ASTNodePosition.getEnd(start, before);
-        const trimmedContent = trimIndentation(before, start.column - 1);
-        const metablockMatcher = new SimpleMatcher(
-            new RegExp(`^${regex.yamlMetablock}`, 'm'),
-        );
-        const metablockMatch = metablockMatcher.findFirstMatch(trimmedContent);
+        let content = trimIndentation(before, start.column - 1);
+        const metablockMatch = metablockMatcher.findFirstMatch(content);
         const metablock = metablockMatch?.matched ?? '';
-        let content = before;
         if (metablock.length > 0)
-            content = trimEndingNewline(before.slice(0, -metablock.length));
+            content = trimEndingNewline(content.slice(0, -metablock.length));
         const textBlock = new TextBlock(false, start, end, parent);
         const metadata = this.parseMetablock(metablock);
         Object.keys(metadata).forEach(key =>
