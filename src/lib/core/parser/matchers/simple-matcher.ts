@@ -2,7 +2,7 @@ import {Match} from './match';
 import {Matcher} from './matcher';
 
 /**
- * A matcher which can find basic matches against a regex pattern is a given
+ * A matcher which can find basic matches against a regex pattern in a given
  * text
  */
 export class SimpleMatcher implements Matcher {

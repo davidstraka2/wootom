@@ -7,6 +7,8 @@ import {TextBlock} from '../../../../lib/core/ast/text-block';
 import {TextNode} from '../../../../lib/core/ast/text-node';
 import {Parser} from '../../../../lib/core/parser/parser';
 import {IndentedBlock} from '../../../../lib/core/ast/indented-block';
+import {InnerEnv} from '../../../../lib/core/ast/inner-env';
+import {InlineMath} from '../../../../lib/core/ast/inline-math';
 
 function allChildrenHaveCorrectParents(node: ASTNode): boolean {
     return node.children.every(
@@ -1544,6 +1546,398 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     ' tincidunt.',
                 false,
                 {line: 40, column: 5, offset: 530},
+                textBlock5,
+            ),
+        );
+        outerEnv4.addChildren(textBlock5);
+        outerEnv3.addChildren(outerEnv4);
+        expectedRoot.addChildren(outerEnv3);
+
+        // -- Act
+        const root = parser.parse(woowooSource);
+
+        // -- Assert
+        expect(expectedRoot.equals(root)).toBeTrue();
+        expect(root.parent).toBeUndefined();
+        expect(allChildrenHaveCorrectParents(root)).toBeTrue();
+    });
+
+    it('Parses a complex WooWoo document with all types of elements', () => {
+        // -- Arrange
+        const woowooSource = `
+%% A comment
+  % Also a comment
+
+.Chapter The First Chapter % Not a comment
+  label: chap-1
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. % Also not a comment
+  only: html
+
+
+  Mauris nibh odio,
+  porta in nulla ac,
+  vehicula porttitor erat.
+
+
+.Figure:
+  label: fig-1
+
+  !tikz:
+    filename: file-1
+    options: 'o1, o2'
+
+    % Not a comment
+    Nam volutpat lobortis ex quis .quoted:lacinia.
+    Aliquam vitae "aliquet".quoted diam, eget consectetur leo.
+
+  % A comment
+
+  .caption:
+
+    Proin tincidunt .quoted:maximus placerat.
+
+
+.Section The First Section
+  label: sec-1
+
+.quote:
+
+  .quote:
+
+    Nam "et consectetur".emphasize quam.
+      only: pdf
+
+
+    Cras "varius"#sec-1 "ipsum".1 "non".notion.2 "quam"@3 pretium,
+    ac $fringilla diam$ tincidunt.`;
+        const expectedRoot = new DocumentRoot({
+            line: 47,
+            column: 35,
+            offset: 769,
+        });
+        const chapterPart = new DocumentPart(
+            'Chapter',
+            {line: 5, column: 1, offset: 34},
+            {line: 6, column: 16, offset: 92},
+            expectedRoot,
+        );
+        chapterPart.addChildren(
+            new TextNode(
+                'The First Chapter % Not a comment',
+                false,
+                {line: 5, column: 10, offset: 43},
+                chapterPart,
+            ),
+        );
+        chapterPart.setMetadata('label', 'chap-1');
+        expectedRoot.addChildren(chapterPart);
+        const textBlock1 = new TextBlock(
+            false,
+            {line: 8, column: 1, offset: 94},
+            {line: 9, column: 13, offset: 184},
+            expectedRoot,
+        );
+        textBlock1.addChildren(
+            new TextNode(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
+                    ' % Also not a comment',
+                false,
+                {line: 8, column: 1, offset: 94},
+                textBlock1,
+            ),
+        );
+        textBlock1.setMetadata('only', 'html');
+        expectedRoot.addChildren(textBlock1);
+        const indentedBlock = new IndentedBlock(
+            false,
+            {line: 12, column: 3, offset: 189},
+            {line: 14, column: 27, offset: 254},
+            expectedRoot,
+        );
+        indentedBlock.addChildren(
+            new TextNode(
+                'Mauris nibh odio,\nporta in nulla ac,\nvehicula porttitor' +
+                    ' erat.',
+                false,
+                {line: 12, column: 3, offset: 189},
+                indentedBlock,
+            ),
+        );
+        expectedRoot.addChildren(indentedBlock);
+        const documentObject = new DocumentObject(
+            'Figure',
+            false,
+            {line: 17, column: 1, offset: 257},
+            {line: 18, column: 15, offset: 280},
+            expectedRoot,
+        );
+        documentObject.setMetadata('label', 'fig-1');
+        const outerEnv1 = new OuterEnv(
+            'tikz',
+            true,
+            {line: 20, column: 3, offset: 284},
+            {line: 22, column: 22, offset: 333},
+            documentObject,
+        );
+        outerEnv1.setMetadata('filename', 'file-1');
+        outerEnv1.setMetadata('options', 'o1, o2');
+        const textBlock2 = new TextBlock(
+            true,
+            {line: 24, column: 5, offset: 339},
+            {line: 26, column: 63, offset: 468},
+            outerEnv1,
+        );
+        textBlock2.addChildren(
+            new TextNode(
+                '% Not a comment\nNam volutpat lobortis ex quis' +
+                    ' .quoted:lacinia.\nAliquam vitae "aliquet".quoted diam,' +
+                    ' eget consectetur leo.',
+                true,
+                {line: 24, column: 5, offset: 339},
+                textBlock2,
+            ),
+        );
+        outerEnv1.addChildren(textBlock2);
+        documentObject.addChildren(outerEnv1);
+        const outerEnv2 = new OuterEnv(
+            'caption',
+            false,
+            {line: 30, column: 3, offset: 487},
+            {line: 30, column: 12, offset: 496},
+            documentObject,
+        );
+        const textBlock3 = new TextBlock(
+            false,
+            {line: 32, column: 5, offset: 502},
+            {line: 32, column: 46, offset: 543},
+            outerEnv2,
+        );
+        const innerEnv1 = new InnerEnv(
+            'quoted',
+            false,
+            {line: 32, column: 21, offset: 518},
+            {line: 32, column: 36, offset: 533},
+            textBlock3,
+        );
+        innerEnv1.addChildren(
+            new TextNode(
+                'maximus',
+                false,
+                {line: 32, column: 29, offset: 526},
+                innerEnv1,
+            ),
+        );
+        textBlock3.addChildren(
+            new TextNode(
+                'Proin tincidunt ',
+                false,
+                {line: 32, column: 5, offset: 502},
+                textBlock3,
+            ),
+            innerEnv1,
+            new TextNode(
+                ' placerat.',
+                false,
+                {line: 32, column: 36, offset: 533},
+                textBlock3,
+            ),
+        );
+        outerEnv2.addChildren(textBlock3);
+        documentObject.addChildren(outerEnv2);
+        expectedRoot.addChildren(documentObject);
+        const sectionPart = new DocumentPart(
+            'Section',
+            {line: 35, column: 1, offset: 546},
+            {line: 36, column: 15, offset: 587},
+            expectedRoot,
+        );
+        sectionPart.setMetadata('label', 'sec-1');
+        sectionPart.addChildren(
+            new TextNode(
+                'The First Section',
+                false,
+                {line: 35, column: 10, offset: 555},
+                chapterPart,
+            ),
+        );
+        expectedRoot.addChildren(sectionPart);
+        const outerEnv3 = new OuterEnv(
+            'quote',
+            false,
+            {line: 38, column: 1, offset: 589},
+            {line: 38, column: 8, offset: 596},
+            documentObject,
+        );
+        const outerEnv4 = new OuterEnv(
+            'quote',
+            false,
+            {line: 40, column: 3, offset: 600},
+            {line: 40, column: 10, offset: 607},
+            outerEnv3,
+        );
+        const textBlock4 = new TextBlock(
+            false,
+            {line: 42, column: 5, offset: 613},
+            {line: 43, column: 16, offset: 665},
+            outerEnv4,
+        );
+        textBlock4.setMetadata('only', 'pdf');
+        const innerEnv2 = new InnerEnv(
+            'emphasize',
+            false,
+            {line: 42, column: 9, offset: 617},
+            {line: 42, column: 35, offset: 643},
+            textBlock4,
+        );
+        innerEnv2.addChildren(
+            new TextNode(
+                'et consectetur',
+                false,
+                {line: 42, column: 10, offset: 618},
+                textBlock4,
+            ),
+        );
+        textBlock4.addChildren(
+            new TextNode(
+                'Nam ',
+                false,
+                {line: 42, column: 5, offset: 613},
+                textBlock4,
+            ),
+            innerEnv2,
+            new TextNode(
+                ' quam.',
+                false,
+                {line: 42, column: 35, offset: 643},
+                textBlock4,
+            ),
+        );
+        outerEnv4.addChildren(textBlock4);
+        const textBlock5 = new TextBlock(
+            false,
+            {line: 46, column: 5, offset: 672},
+            {line: 47, column: 35, offset: 769},
+            outerEnv4,
+        );
+        const innerEnv3 = new InnerEnv(
+            '_reference',
+            false,
+            {line: 46, column: 10, offset: 677},
+            {line: 46, column: 24, offset: 691},
+            textBlock5,
+        );
+        innerEnv3.setMetadata('_reference', 'sec-1');
+        innerEnv3.addChildren(
+            new TextNode(
+                'varius',
+                false,
+                {line: 46, column: 11, offset: 678},
+                textBlock5,
+            ),
+        );
+        const innerEnv4 = new InnerEnv(
+            '_index',
+            false,
+            {line: 46, column: 25, offset: 692},
+            {line: 46, column: 34, offset: 701},
+            textBlock5,
+        );
+        innerEnv4.setMetadata('_index', '1');
+        innerEnv4.addChildren(
+            new TextNode(
+                'ipsum',
+                false,
+                {line: 46, column: 26, offset: 693},
+                textBlock5,
+            ),
+        );
+        const innerEnv5 = new InnerEnv(
+            'notion',
+            false,
+            {line: 46, column: 35, offset: 702},
+            {line: 46, column: 49, offset: 716},
+            textBlock5,
+        );
+        innerEnv5.setMetadata('_index', '2');
+        innerEnv5.addChildren(
+            new TextNode(
+                'non',
+                false,
+                {line: 46, column: 36, offset: 703},
+                textBlock5,
+            ),
+        );
+        const innerEnv6 = new InnerEnv(
+            '_index',
+            false,
+            {line: 46, column: 50, offset: 717},
+            {line: 46, column: 58, offset: 725},
+            textBlock5,
+        );
+        innerEnv6.setMetadata('_index', '3');
+        innerEnv6.addChildren(
+            new TextNode(
+                'quam',
+                false,
+                {line: 46, column: 51, offset: 718},
+                textBlock5,
+            ),
+        );
+        const inlineMath = new InlineMath(
+            true,
+            {line: 47, column: 8, offset: 742},
+            {line: 47, column: 24, offset: 758},
+            textBlock5,
+        );
+        inlineMath.addChildren(
+            new TextNode(
+                'fringilla diam',
+                true,
+                {line: 47, column: 9, offset: 743},
+                textBlock5,
+            ),
+        );
+        textBlock5.addChildren(
+            new TextNode(
+                'Cras ',
+                false,
+                {line: 46, column: 5, offset: 672},
+                textBlock5,
+            ),
+            innerEnv3,
+            new TextNode(
+                ' ',
+                false,
+                {line: 46, column: 24, offset: 691},
+                textBlock5,
+            ),
+            innerEnv4,
+            new TextNode(
+                ' ',
+                false,
+                {line: 46, column: 34, offset: 701},
+                textBlock5,
+            ),
+            innerEnv5,
+            new TextNode(
+                ' ',
+                false,
+                {line: 46, column: 49, offset: 716},
+                textBlock5,
+            ),
+            innerEnv6,
+            new TextNode(
+                ' pretium,\nac ',
+                false,
+                {line: 46, column: 58, offset: 725},
+                textBlock5,
+            ),
+            inlineMath,
+            new TextNode(
+                ' tincidunt.',
+                false,
+                {line: 47, column: 24, offset: 758},
                 textBlock5,
             ),
         );

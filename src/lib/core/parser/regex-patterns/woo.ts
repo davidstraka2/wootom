@@ -32,7 +32,7 @@ const documentPartVariant = `${uppercaseLetter}\\w*`;
  * possibly including its metablock.
  *
  * Contains 4 capture groups:
- * 1. Everything until (excluding) the title
+ * 1. Everything before the title
  * 2. The variant of the document part
  * 3. The title of the document part
  * 4. An optional YAML metablock of the document part
@@ -123,3 +123,73 @@ export const outerEnv = getDocumentObjectOrOuterEnv('OuterEnv', false);
  * 2. An optional YAML metablock of the fragile outer environment
  */
 export const fragileOuterEnv = getDocumentObjectOrOuterEnv('OuterEnv', true);
+
+/**
+ * A regex pattern representing a basic type short WooWoo inner environment.
+ *
+ * Contains 3 capture groups:
+ * 1. The variant
+ * 2. Everything before the content
+ * 3. The content
+ */
+export const shortInnerEnv =
+    '(' + // Begin the 1st capture group
+    '\\.' + // A dot
+    '(' + // Begin the 2nd capture group
+    lowercaseLetter + // A lowercase letter
+    '[\\w-]*' + // Any number of word chars or dashes
+    ')' + // End the 2nd capture group
+    ':' + // A colon
+    ')' + // End the 1st capture group
+    '(' + // Begin the 3rd capture group
+    '[\\w-]*' + // Any number of word chars or dashes
+    ')'; // End the 3rd capture group
+
+/**
+ * A regex pattern representing the definition of either a basic, or a reference
+ * type verbose WooWoo inner environment ending.
+ *
+ * Contains 3 capture groups:
+ * 1. The separator (determining whether the env is basic, or reference)
+ * 2. The variant
+ * 3. An optional index
+ */
+export const verboseInnerEnvEnd =
+    '"' + // A double quotation mark
+    // The 1st capture group containing the separator - either a dot, or a...
+    // ...number sign
+    '(\\.|#)' +
+    '(' + // Begin the 2nd capture group
+    lowercaseLetter + // A lowercase letter
+    '[\\w-]*' + // Any number of word chars or dashes
+    ')(?:' + // End the 2nd capture group; begin a non-capturing group
+    '\\.' + // A dot
+    '(\\d+)' + // The 3rd (optional) capture group containing one or more digits
+    ')?'; // End the non-capturing group
+
+/**
+ * A regex pattern representing the definition of an index type verbose WooWoo
+ * inner environment ending.
+ *
+ * Contains 1 capture group:
+ * 1. The index
+ */
+export const verboseIndexInnerEnvEnd =
+    '"' + // A double quotation mark
+    // A non-capturing group containing the separator - a dot or an at sign
+    '(?:\\.|@)' +
+    // The 1st capture group containing the index value - one or more digits
+    '(\\d+)';
+
+/**
+ * A regex pattern representing an inline math element.
+ *
+ * Contains 1 capture group:
+ * 1. The content
+ */
+export const inlineMath =
+    '\\$' + // A dollar sign
+    // The 1st capture group containing one or more chars of any type but a...
+    // ...dollar sign
+    '([^$]+)' +
+    '\\$'; // A dollar sign

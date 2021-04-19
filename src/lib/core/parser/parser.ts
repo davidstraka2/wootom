@@ -14,10 +14,14 @@ import {DocumentObject} from '../ast/document-object';
 import {DocumentPart} from '../ast/document-part';
 import {DocumentRoot} from '../ast/document-root';
 import {IndentedBlock} from '../ast/indented-block';
+import {InlineMath} from '../ast/inline-math';
+import {InnerEnv} from '../ast/inner-env';
 import {OuterEnv} from '../ast/outer-env';
 import {TextBlock} from '../ast/text-block';
 import {TextNode} from '../ast/text-node';
+import {Match} from './matchers/match';
 import {Matcher} from './matchers/matcher';
+import {PairMatcher} from './matchers/pair-matcher';
 import {SimpleMatcher} from './matchers/simple-matcher';
 import * as regex from './regex-patterns/woo';
 
@@ -42,6 +46,17 @@ const fragileOuterEnvMatcher = new SimpleMatcher(
 const textBlockSeparatorMatcher = new SimpleMatcher(
     new RegExp(`${eol}${horizontalWhitespace}*${eol}`),
 );
+const shortInnerEnvMatcher = new SimpleMatcher(new RegExp(regex.shortInnerEnv));
+const verboseInnerEnvMatcher = new PairMatcher(
+    /"/,
+    new RegExp(regex.verboseInnerEnvEnd),
+);
+const verboseIndexInnerEnvMatcher = new PairMatcher(
+    /"/,
+    new RegExp(regex.verboseIndexInnerEnvEnd),
+);
+const inlineMathMatcher = new SimpleMatcher(new RegExp(regex.inlineMath));
+const inlineCommentMatcher = new SimpleMatcher(/^\s*%.*/);
 
 /** Parses a WooWoo document into a WooWoo AST */
 export class Parser {
@@ -94,6 +109,17 @@ export class Parser {
             scope.popWhile(node => start.column <= node.startColumn);
             const realParent = scope.top ?? parent;
 
+            if (!realParent.isFragile) {
+                const match = inlineCommentMatcher.findFirstMatch(
+                    remainingSource,
+                );
+                if (typeof match !== 'undefined' && match.index === 0) {
+                    remainingSource = match.after;
+                    start = ASTNodePosition.getEnd(start, match.matched);
+                    continue;
+                }
+            }
+
             const unscoped: WooElementKind[] = [
                 'DocumentPart',
                 'IndentedBlock',
@@ -127,7 +153,7 @@ export class Parser {
     }
 
     /**
-     * Parse inline content
+     * Parse inline content of a block
      *
      * @param start The position of the start of the inline content
      * @param parent The parent node of the inline content
@@ -139,8 +165,221 @@ export class Parser {
         start: ASTNodePosition,
         parent: ASTNode,
         source: string,
-    ): ASTNode[] {
-        return [this.parseTextNode(start, parent, source)];
+    ): void {
+        const contents: (ASTNode | string)[] = [];
+        const lines = source.split('\n').map(line => `${line}\n`);
+        const lastLine = lines.pop();
+        if (typeof lastLine !== 'undefined') lines.push(lastLine.slice(0, -1));
+        let lineStart = start;
+        lines.forEach(line => {
+            contents.push(...this.parseLineContent(lineStart, parent, line));
+            lineStart = ASTNodePosition.getEnd(lineStart, line);
+            const indentation = parent.startColumn - lineStart.column;
+            lineStart.column += indentation;
+            lineStart.offset += indentation;
+        });
+        if (contents.length === 0) return;
+        const compactedContents = [];
+        let lastContent = contents[0];
+        compactedContents.push(lastContent);
+        for (let i = 1; i < contents.length; i++) {
+            const currentContent = contents[i];
+            if (
+                typeof lastContent === 'string' &&
+                typeof currentContent === 'string'
+            ) {
+                compactedContents.pop();
+                lastContent = `${lastContent}${currentContent}`;
+            } else {
+                lastContent = currentContent;
+            }
+            compactedContents.push(lastContent);
+        }
+        for (let i = 0; i < compactedContents.length; i++) {
+            const currentContent = compactedContents[i];
+            const siblingIndex = parent.children.length;
+            const currentStart =
+                siblingIndex > 0
+                    ? parent.children[siblingIndex - 1].end
+                    : start;
+            if (typeof currentContent === 'string') {
+                parent.addChildren(
+                    this.parseTextNode(currentStart, parent, currentContent),
+                );
+            } else {
+                parent.addChildren(currentContent);
+            }
+        }
+    }
+
+    parseLineContent(
+        start: ASTNodePosition,
+        parent: ASTNode,
+        source: string,
+    ): (ASTNode | string)[] {
+        start = new ASTNodePosition(start);
+        const contents = [];
+        let lineRemainder = source;
+        while (lineRemainder.length > 0) {
+            const inlineMathMatch = inlineMathMatcher.findFirstMatch(
+                lineRemainder,
+            );
+            const shortInnerEnvMatch = shortInnerEnvMatcher.findFirstMatch(
+                lineRemainder,
+            );
+            const verboseIndexInnerEnvMatch = verboseIndexInnerEnvMatcher.findFirstMatch(
+                lineRemainder,
+            );
+            const verboseInnerEnvMatch = verboseInnerEnvMatcher.findFirstMatch(
+                lineRemainder,
+            );
+            if (inlineMathMatch?.index === 0) {
+                if (typeof inlineMathMatch.groups[0] === 'undefined')
+                    throw new Error('Unknown error in parsing.');
+                const end = ASTNodePosition.getEnd(
+                    start,
+                    inlineMathMatch.matched,
+                );
+                const inlineMath = new InlineMath(true, start, end, parent);
+                inlineMath.addChildren(
+                    new TextNode(
+                        inlineMathMatch.groups[0],
+                        true,
+                        ASTNodePosition.getEnd(start, '$'),
+                        inlineMath,
+                    ),
+                );
+                contents.push(inlineMath);
+                start = end;
+                lineRemainder = inlineMathMatch.after;
+            } else if (shortInnerEnvMatch?.index === 0) {
+                if (
+                    typeof shortInnerEnvMatch.groups[0] === 'undefined' ||
+                    typeof shortInnerEnvMatch.groups[1] === 'undefined' ||
+                    typeof shortInnerEnvMatch.groups[2] === 'undefined'
+                ) {
+                    throw new Error('Unknown error in parsing.');
+                }
+                const end = ASTNodePosition.getEnd(
+                    start,
+                    shortInnerEnvMatch.matched,
+                );
+                const innerEnv = new InnerEnv(
+                    shortInnerEnvMatch.groups[1],
+                    false,
+                    start,
+                    end,
+                    parent,
+                );
+                innerEnv.addChildren(
+                    new TextNode(
+                        shortInnerEnvMatch.groups[2],
+                        false,
+                        ASTNodePosition.getEnd(
+                            start,
+                            shortInnerEnvMatch.groups[0],
+                        ),
+                        innerEnv,
+                    ),
+                );
+                contents.push(innerEnv);
+                start = end;
+                lineRemainder = shortInnerEnvMatch.after;
+            } else if (verboseIndexInnerEnvMatch?.index === 0) {
+                if (
+                    typeof verboseIndexInnerEnvMatch.groups[0] ===
+                        'undefined' ||
+                    typeof verboseIndexInnerEnvMatch.groups[1] === 'undefined'
+                ) {
+                    throw new Error('Unknown error in parsing.');
+                }
+                const end = ASTNodePosition.getEnd(
+                    start,
+                    verboseIndexInnerEnvMatch.matched,
+                );
+                const innerEnv = new InnerEnv(
+                    '_index',
+                    false,
+                    start,
+                    end,
+                    parent,
+                );
+                const innerStart = ASTNodePosition.getEnd(start, '"');
+                innerEnv.setMetadata(
+                    '_index',
+                    verboseIndexInnerEnvMatch.groups[1],
+                );
+                this.parseInlineContent(
+                    innerStart,
+                    innerEnv,
+                    verboseIndexInnerEnvMatch.groups[0],
+                );
+                contents.push(innerEnv);
+                start = end;
+                lineRemainder = verboseIndexInnerEnvMatch.after;
+            } else if (verboseInnerEnvMatch?.index === 0) {
+                if (
+                    typeof verboseInnerEnvMatch.groups[0] === 'undefined' ||
+                    typeof verboseInnerEnvMatch.groups[1] === 'undefined' ||
+                    typeof verboseInnerEnvMatch.groups[2] === 'undefined'
+                ) {
+                    throw new Error('Unknown error in parsing.');
+                }
+                const end = ASTNodePosition.getEnd(
+                    start,
+                    verboseInnerEnvMatch.matched,
+                );
+                let variant = verboseInnerEnvMatch.groups[2];
+                if (verboseInnerEnvMatch.groups[1] === '#')
+                    variant = '_reference';
+                const innerEnv = new InnerEnv(
+                    variant,
+                    false,
+                    start,
+                    end,
+                    parent,
+                );
+                if (verboseInnerEnvMatch.groups[1] === '#')
+                    innerEnv.setMetadata(
+                        '_reference',
+                        verboseInnerEnvMatch.groups[2],
+                    );
+                if (typeof verboseInnerEnvMatch.groups[3] !== 'undefined')
+                    innerEnv.setMetadata(
+                        '_index',
+                        verboseInnerEnvMatch.groups[3],
+                    );
+                const innerStart = ASTNodePosition.getEnd(start, '"');
+                this.parseInlineContent(
+                    innerStart,
+                    innerEnv,
+                    verboseInnerEnvMatch.groups[0],
+                );
+                contents.push(innerEnv);
+                start = end;
+                lineRemainder = verboseInnerEnvMatch.after;
+            } else {
+                const matches = [
+                    inlineMathMatch,
+                    shortInnerEnvMatch,
+                    verboseIndexInnerEnvMatch,
+                    verboseInnerEnvMatch,
+                ].filter(match => typeof match !== 'undefined') as Match[];
+                if (matches.length > 0) {
+                    matches.sort((a, b) => a.index - b.index);
+                    const nearestMatch = matches[0];
+                    lineRemainder = lineRemainder.slice(
+                        nearestMatch.before.length,
+                    );
+                    start = ASTNodePosition.getEnd(start, nearestMatch.before);
+                    contents.push(nearestMatch.before);
+                } else {
+                    contents.push(lineRemainder);
+                    lineRemainder = '';
+                }
+            }
+        }
+        return contents;
     }
 
     /**
@@ -192,12 +431,10 @@ export class Parser {
         );
         const documentPart = new DocumentPart(variant, start, end, parent);
         const titleStart = ASTNodePosition.getEnd(start, beforeTitle);
-        documentPart.addChildren(
-            ...this.parseInlineContent(
-                titleStart,
-                documentPart,
-                trimEndingNewline(title),
-            ),
+        this.parseInlineContent(
+            titleStart,
+            documentPart,
+            trimEndingNewline(title),
         );
         const metadata = this.parseMetablock(metablock);
         Object.keys(metadata).forEach(key =>
@@ -384,9 +621,7 @@ export class Parser {
         Object.keys(metadata).forEach(key =>
             indentedBlock.setMetadata(key, metadata[key]),
         );
-        indentedBlock.addChildren(
-            ...this.parseInlineContent(start, indentedBlock, content),
-        );
+        this.parseInlineContent(start, indentedBlock, content);
         return {
             parsed: indentedBlock,
             after: `${match?.matched ?? ''}${after}`,
@@ -419,9 +654,7 @@ export class Parser {
         Object.keys(metadata).forEach(key =>
             textBlock.setMetadata(key, metadata[key]),
         );
-        textBlock.addChildren(
-            ...this.parseInlineContent(start, textBlock, content),
-        );
+        this.parseInlineContent(start, textBlock, content);
         return {parsed: textBlock, after: `${match?.matched ?? ''}${after}`};
     }
 

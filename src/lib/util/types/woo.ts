@@ -4,6 +4,8 @@ export type WooElementKind =
     | 'DocumentPart'
     | 'DocumentRoot'
     | 'IndentedBlock'
+    | 'InlineMath'
+    | 'InnerEnv'
     | 'OuterEnv'
     | 'TextBlock'
     | 'TextNode';

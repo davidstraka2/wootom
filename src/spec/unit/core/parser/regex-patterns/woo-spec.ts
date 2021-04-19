@@ -4,6 +4,10 @@ import {
     documentObject,
     outerEnv,
     fragileOuterEnv,
+    shortInnerEnv,
+    verboseInnerEnvEnd,
+    verboseIndexInnerEnvEnd,
+    inlineMath,
 } from '../../../../../lib/core/parser/regex-patterns/woo';
 
 describe('yamlMetablock', () => {
@@ -639,6 +643,364 @@ describe('fragileOuterEnv', () => {
         // -- Arrange
         const regex = new RegExp(fragileOuterEnv);
         const input = '.tikz:';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+});
+
+describe('shortInnerEnv', () => {
+    it('Matches a simple short inner environment (#1)', () => {
+        // -- Arrange
+        const regex = new RegExp(shortInnerEnv);
+        const input = '.quoted:abc';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(4);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('.quoted:');
+        expect(match[2]).toBe('quoted');
+        expect(match[3]).toBe('abc');
+    });
+
+    it('Matches a simple short inner environment (#2)', () => {
+        // -- Arrange
+        const regex = new RegExp(shortInnerEnv);
+        const input = '.quoted:abc-def-1';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(4);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('.quoted:');
+        expect(match[2]).toBe('quoted');
+        expect(match[3]).toBe('abc-def-1');
+    });
+
+    it('Does NOT match a short inner environment with uppercase variant', () => {
+        // -- Arrange
+        const regex = new RegExp(shortInnerEnv);
+        const input = '.Quoted:abc';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match a short inner environment without the leading dot', () => {
+        // -- Arrange
+        const regex = new RegExp(shortInnerEnv);
+        const input = 'quoted:abc';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match a short inner environment without a correct separator', () => {
+        // -- Arrange
+        const regex = new RegExp(shortInnerEnv);
+        const input = '.quoted;abc';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+});
+
+describe('verboseInnerEnvEnd', () => {
+    it('Matches a simple basic type verbose inner environment ending', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '".quoted';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(4);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('.');
+        expect(match[2]).toBe('quoted');
+        expect(match[3]).toBeUndefined();
+    });
+
+    it('Matches a simple reference type verbose inner environment ending (#1)', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '"#fig';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(4);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('#');
+        expect(match[2]).toBe('fig');
+        expect(match[3]).toBeUndefined();
+    });
+
+    it('Matches a simple reference type verbose inner environment ending (#2)', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '"#fig-a-1';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(4);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('#');
+        expect(match[2]).toBe('fig-a-1');
+        expect(match[3]).toBeUndefined();
+    });
+
+    it('Matches a simple basic type verbose inner environment ending with an index', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '".quoted.1';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(4);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('.');
+        expect(match[2]).toBe('quoted');
+        expect(match[3]).toBe('1');
+    });
+
+    it('Matches a simple reference type verbose inner environment ending with an index', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '"#fig-1.23';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(4);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('#');
+        expect(match[2]).toBe('fig-1');
+        expect(match[3]).toBe('23');
+    });
+
+    it('Does NOT match a simple basic type verbose inner environment ending with uppercase variant', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '".Quoted';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match a simple basic type verbose inner environment ending without the leading quotation mark', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '.Quoted';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match a simple basic type verbose inner environment ending with uppercase variant', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '".Quoted';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match a simple basic type verbose inner environment ending without a correct separator', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseInnerEnvEnd);
+        const input = '!;quoted';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+});
+
+describe('verboseIndexInnerEnvEnd', () => {
+    it('Matches a simple index type verbose inner environment ending (#1)', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseIndexInnerEnvEnd);
+        const input = '"@1';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(2);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('1');
+    });
+
+    it('Matches a simple index type verbose inner environment ending (#2)', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseIndexInnerEnvEnd);
+        const input = '"@23';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(2);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('23');
+    });
+
+    it('Matches a simple index type verbose inner environment ending (#3)', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseIndexInnerEnvEnd);
+        const input = '".12';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(2);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('12');
+    });
+
+    it('Does NOT match an index type verbose inner environment ending with non-digit index', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseIndexInnerEnvEnd);
+        const input = '"@a';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match an index type verbose inner environment ending without the leading quotation mark', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseIndexInnerEnvEnd);
+        const input = '@1';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match an index type verbose inner environment ending without a correct separator', () => {
+        // -- Arrange
+        const regex = new RegExp(verboseIndexInnerEnvEnd);
+        const input = '"!1';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+});
+
+describe('inlineMath', () => {
+    it('Matches a simple inlineMath element', () => {
+        // -- Arrange
+        const regex = new RegExp(inlineMath);
+        const input = '$abc def 123 .*-$';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(2);
+        expect(match[0]).toBe(input);
+        expect(match[1]).toBe('abc def 123 .*-');
+    });
+
+    it('Matches an inline math element closing properly where there are multiple dollar signs', () => {
+        // -- Arrange
+        const regex = new RegExp(inlineMath);
+        const input = '$abc $ def$';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).not.toBeNull();
+        const match = res as RegExpExecArray;
+        expect(match).toHaveSize(2);
+        expect(match[0]).toBe('$abc $');
+        expect(match[1]).toBe('abc ');
+    });
+
+    it('Does NOT match an inlineMath element without the opening dollar sign', () => {
+        // -- Arrange
+        const regex = new RegExp(inlineMath);
+        const input = 'abc$';
+
+        // -- Act
+        const res = regex.exec(input);
+
+        // -- Assert
+        expect(res).toBeNull();
+    });
+
+    it('Does NOT match an inlineMath element without the closing dollar sign', () => {
+        // -- Arrange
+        const regex = new RegExp(inlineMath);
+        const input = '$abc';
 
         // -- Act
         const res = regex.exec(input);

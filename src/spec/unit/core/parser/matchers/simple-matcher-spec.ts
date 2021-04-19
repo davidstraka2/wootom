@@ -2,7 +2,7 @@ import {SimpleMatcher} from '../../../../../lib/core/parser/matchers/simple-matc
 
 describe('SimpleMatcher', () => {
     describe('findFirstMatch', () => {
-        it('Finds the a match of a simple regex in a simple string', () => {
+        it('Finds the match of a simple regex in a simple string', () => {
             // -- Arrange
             const matcher = new SimpleMatcher(/def/);
             const source = 'abc def ghi';
@@ -20,7 +20,7 @@ describe('SimpleMatcher', () => {
             expect(match?.groups).toHaveSize(0);
         });
 
-        it('Finds the a match of a multiline regex in a multiline string', () => {
+        it('Finds the match of a multiline regex in a multiline string', () => {
             // -- Arrange
             const matcher = new SimpleMatcher(/34\n56/);
             const source = '12\n34\n56\n78';
@@ -38,7 +38,7 @@ describe('SimpleMatcher', () => {
             expect(match?.groups).toHaveSize(0);
         });
 
-        it('Finds the a match of a regex with groups in a simple string', () => {
+        it('Finds the match of a regex with groups in a simple string', () => {
             // -- Arrange
             const matcher = new SimpleMatcher(/(d)(ef)/);
             const source = 'abc def ghi';
@@ -58,7 +58,7 @@ describe('SimpleMatcher', () => {
             expect(match?.groups[1]).toEqual('ef');
         });
 
-        it('Finds the a match of a regex with nested groups in a simple string', () => {
+        it('Finds the match of a regex with nested groups in a simple string', () => {
             // -- Arrange
             const matcher = new SimpleMatcher(/(d(e)f)/);
             const source = 'abc def ghi';
