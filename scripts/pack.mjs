@@ -24,6 +24,7 @@ await Promise.all([
     cp('grammars/'),
     cp('lib/'),
     cp('settings/'),
+    cp('styles/'),
     cp('.gitattributes'),
     cp('.gitignore-dist', '.gitignore'),
     cp('CHANGELOG.md'),

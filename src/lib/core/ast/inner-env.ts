@@ -1,10 +1,9 @@
-import {JSONMap} from '../../util/types/json';
 import {ASTNode} from './ast-node';
 import {ASTNodePosition} from './ast-node-position';
 import {VariableASTNode} from './variable-ast-node';
 
 /** A variable ASTNode representing an inner environment */
-export class InnerEnv extends ASTNode implements VariableASTNode {
+export class InnerEnv extends VariableASTNode {
     readonly kind = 'InnerEnv';
 
     /**
@@ -22,11 +21,5 @@ export class InnerEnv extends ASTNode implements VariableASTNode {
         readonly parent?: ASTNode,
     ) {
         super(start, end);
-    }
-
-    toJSON(): JSONMap {
-        const json = super.toJSON();
-        json.variant = this.variant;
-        return json;
     }
 }

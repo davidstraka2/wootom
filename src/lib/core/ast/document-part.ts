@@ -1,10 +1,9 @@
-import {JSONMap} from '../../util/types/json';
 import {ASTNode} from './ast-node';
 import {ASTNodePosition} from './ast-node-position';
 import {VariableASTNode} from './variable-ast-node';
 
 /** A variable ASTNode representing a document part */
-export class DocumentPart extends ASTNode implements VariableASTNode {
+export class DocumentPart extends VariableASTNode {
     readonly kind = 'DocumentPart';
     readonly isFragile = false;
 
@@ -21,11 +20,5 @@ export class DocumentPart extends ASTNode implements VariableASTNode {
         readonly parent?: ASTNode,
     ) {
         super(start, end);
-    }
-
-    toJSON(): JSONMap {
-        const json = super.toJSON();
-        json.variant = this.variant;
-        return json;
     }
 }
