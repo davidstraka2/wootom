@@ -25,8 +25,7 @@
   },
   "activationCommands": {
     "atom-workspace": [
-      "wootom:hello",
-      "wootom:demoView"
+      "wootom:hello"
     ]
   },
   "atomTestRunner": "atom-jasmine3-test-runner",

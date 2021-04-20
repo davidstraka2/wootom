@@ -14,7 +14,6 @@ export function activate(): void {
     subscriptions.add(
         atom.commands.add('atom-workspace', {
             'wootom:hello': () => hello(),
-            'wootom:demoView': () => demoView(),
         }),
     );
 }
@@ -25,22 +24,6 @@ export function deactivate(): void {
 
 export function serialize(): void {
     // empty
-}
-
-export async function demoView(): Promise<void> {
-    htmlViewModel.activate();
-    const div = document.createElement('div');
-    const t = Date.now();
-    for (let i = 1; i <= 50; i++) {
-        await new Promise(resolve => setTimeout(() => resolve(null), 100));
-        const h2 = document.createElement('h2');
-        const text = document.createTextNode(
-            `Heading #${i} (t + ${Date.now() - t} ms)`,
-        );
-        h2.appendChild(text);
-        div.appendChild(h2);
-        await htmlViewModel.render(div);
-    }
 }
 
 export function hello(): void {
