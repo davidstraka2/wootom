@@ -2,15 +2,19 @@ import {ASTNode} from '../../../core/ast/ast-node';
 import {Renderer} from '../../../core/rendering/renderer';
 import {RenderingManager} from '../../../core/rendering/rendering-manager';
 import {WooElementKind} from '../../../util/types/woo';
+import {typesetMath} from '../../mathjax';
 
 export class InlineMathRenderer implements Renderer {
     readonly kind: WooElementKind = 'InlineMath';
 
     render(renderingManager: RenderingManager, astNode: ASTNode): Node {
-        const fragment = document.createDocumentFragment();
-        fragment.append('$');
-        fragment.append(renderingManager.render(...astNode.children));
-        fragment.append('$');
-        return fragment;
+        const span = document.createElement('span');
+        const children = renderingManager.render(...astNode.children);
+        const math = document.createElement('script');
+        math.type = 'math/tex';
+        math.innerHTML = children.textContent ?? '';
+        span.appendChild(math);
+        typesetMath([math]);
+        return span;
     }
 }
