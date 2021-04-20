@@ -1,3 +1,4 @@
+import {Parser} from './parser/parser';
 import {DefaultRenderer} from './rendering/default-renderer';
 import {RendererRegistry} from './rendering/renderer-registry';
 import {RenderingManager} from './rendering/rendering-manager';
@@ -12,3 +13,4 @@ export const renderingManager = new RenderingManager(
     rendererRegistry,
     variantRegistry,
 );
+export const parser = new Parser();
