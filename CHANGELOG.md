@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] (2021-04-20)
+
+### Added
+
+-   Support for math rendering in live preview [[#25], [#26]]
+-   Live HTML preview of WooWoo documents [[#26]]
+-   Basic HTML rendering of most WooWoo elements [[#25]]
+-   Complete parsing of valid WooWoo documents [[#24]]
+-   Support for the "Editor: Toggle Line Comments" command [[#23]]
+
+### Changed
+
+-   Minor WooWoo grammar improvements regarding indentation for better syntax
+    highlighting [[#22]]
+
+### Removed
+
+-   The `demoView` command [[#26]]
+
 ## [0.3.0] (2021-03-16)
 
 ### Added
@@ -48,9 +67,15 @@ and this project adheres to
 -   Set up linting with ESLint (and typescript-eslint/eslint-plugin) [[#10]]
 -   Set up CI using GitHub Actions [[#6], [#7], [#9], [#11]]
 
+[0.4.0]: https://github.com/davidstraka2/wootom/compare/v0.3.0-src...v0.4.0-src
 [0.3.0]: https://github.com/davidstraka2/wootom/compare/v0.2.0-src...v0.3.0-src
 [0.2.0]: https://github.com/davidstraka2/wootom/compare/v0.1.0-src...v0.2.0-src
 [0.1.0]: https://github.com/davidstraka2/wootom/releases/tag/v0.1.0-src
+[#26]: https://github.com/davidstraka2/wootom/issues/26
+[#25]: https://github.com/davidstraka2/wootom/issues/25
+[#24]: https://github.com/davidstraka2/wootom/issues/24
+[#23]: https://github.com/davidstraka2/wootom/issues/23
+[#22]: https://github.com/davidstraka2/wootom/issues/22
 [#21]: https://github.com/davidstraka2/wootom/issues/21
 [#19]: https://github.com/davidstraka2/wootom/issues/19
 [#18]: https://github.com/davidstraka2/wootom/issues/18

@@ -1,13 +1,13 @@
 import { ViewModel } from 'atom';
 import { ViewRegistryAdder } from '../atom-abstractions/view-registry-adder';
-import { WorkspaceItemOpener } from '../atom-abstractions/workspace-item-opener';
+import { WorkspaceItemManager } from '../atom-abstractions/workspace-item-manager';
 import { HTMLView } from './html-view';
 /** Handles the application logic of the HTML View pane item */
 export declare class HTMLViewModel implements ViewModel {
     private title;
     private readonly view;
     private readonly viewRegistryAdder;
-    private readonly workspaceItemOpener;
+    private readonly workspaceItemManager;
     /**
      * @param title The title of the HTML View pane item
      * @param view The view to use for the model
@@ -15,9 +15,10 @@ export declare class HTMLViewModel implements ViewModel {
      * layer
      * @param workspaceItemOpener To be used to open a new pane with the view
      */
-    constructor(title: string, view: Required<HTMLView>, viewRegistryAdder: ViewRegistryAdder, workspaceItemOpener: WorkspaceItemOpener);
+    constructor(title: string, view: Required<HTMLView>, viewRegistryAdder: ViewRegistryAdder, workspaceItemManager: WorkspaceItemManager);
     /** Activate the model; register it and its view with the ViewRegistry */
     activate(): void;
+    get isOpen(): boolean;
     /**
      * @returns The title of the HTML View pane item
      * @override
@@ -27,10 +28,12 @@ export declare class HTMLViewModel implements ViewModel {
      * @param title The title of the HTML View pane item
      */
     setTitle(title: string): void;
+    close(): void;
+    open(): Promise<void>;
     /**
      * Render HTML content in an HTML View pane
      *
      * @param content The content to render
      */
-    render(content: Node): Promise<void>;
+    render(content: Node): void;
 }

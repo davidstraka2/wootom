@@ -19,11 +19,11 @@ patterns: [
 
 repository:
     inlineComment: {
-        match: '(?<!%)%.*'
+        match: '^%.*'
         name: 'comment.line.woo'
     }
     partHeading: {
-        begin: '^\\s*(\\.)([A-Z]\\w*)[^\\S\\r\\n]+(.+)'
+        begin: '^(\\.)([A-Z]\\w*)[^\\S\\r\\n]+(.+)'
         beginCaptures:
             1: name: 'keyword.operator.foo'
             2: name: 'markup.heading.foo'
