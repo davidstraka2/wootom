@@ -11,18 +11,20 @@ const distDir = 'dist';
  * be copied to. Leave undefined to use the src path.
  * @returns Promise which resolves after the copy operation is finished
  */
-const cp = async (src, dest) => {
+async function cp(src, dest) {
     if (!(await pathExists(src))) return;
     if (typeof dest === 'undefined') dest = src;
     await copy(src, resolve(distDir, dest));
-};
+}
 
 // Ensure that distDir and any parent directories exist
 await mkdirs(distDir);
 
 await Promise.all([
     cp('grammars/'),
+    cp('keymaps/'),
     cp('lib/'),
+    cp('menus/'),
     cp('settings/'),
     cp('styles/'),
     cp('.gitattributes'),

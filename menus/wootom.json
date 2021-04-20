@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Wootom: Toggle Preview",
+        "command": "wootom:togglePreview"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Wootom",
+          "submenu": [
+            {
+              "label": "Toggle Preview",
+              "command": "wootom:togglePreview"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
