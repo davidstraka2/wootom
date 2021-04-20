@@ -2,6 +2,7 @@ import {CompositeDisposable} from 'atom';
 import {htmlViewModel, parser, renderingManager} from './core';
 import {PreviewSubscriber} from './core/preview/preview-subscriber';
 import {registerTemplate} from './template';
+import {loadMathJax} from './template/mathjax';
 
 export const notificationMessage = 'Wootom was called and says hello!';
 
@@ -19,6 +20,7 @@ export function activate(): void {
     // CompositeDisposable
     subscriptions = new CompositeDisposable();
 
+    loadMathJax();
     registerTemplate();
     htmlViewModel.activate();
     previewSubscriber.activate();
