@@ -11,9 +11,18 @@ export class DefaultOuterEnvRenderer implements Renderer {
     render(renderingManager: RenderingManager, astNode: ASTNode): Node {
         const outerEnv = astNode as OuterEnv;
         const message = `Unknown outer environment variant "${outerEnv.variant}"`;
+        const fragment = document.createDocumentFragment();
+        const children = renderingManager.render(...outerEnv.children);
+        if (outerEnv.isFragile) {
+            const pre = document.createElement('pre');
+            pre.append(children);
+            fragment.append(pre);
+        } else {
+            fragment.append(children);
+        }
         return errorBlockComponent({
             title: message,
-            children: [renderingManager.render(...outerEnv.children)],
+            children: [fragment],
         });
     }
 }
