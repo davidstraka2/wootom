@@ -19,7 +19,8 @@ describe('HTMLViewModel', () => {
         htmlViewModel.activate();
 
         // -- Act
-        await htmlViewModel.render(content);
+        await htmlViewModel.open();
+        htmlViewModel.render(content);
 
         // -- Assert
         const expectedView = document.createElement('div');
@@ -47,12 +48,11 @@ describe('HTMLViewModel', () => {
             return section;
         };
         htmlViewModel.activate();
-        await htmlViewModel.render(createContent('My Heading', 'Lorem ipsum'));
+        await htmlViewModel.open();
+        htmlViewModel.render(createContent('My Heading', 'Lorem ipsum'));
 
         // -- Act
-        await htmlViewModel.render(
-            createContent('My Heading #2', 'Lorem ipsum #2'),
-        );
+        htmlViewModel.render(createContent('My Heading #2', 'Lorem ipsum #2'));
 
         // -- Assert
         const expectedView = document.createElement('div');

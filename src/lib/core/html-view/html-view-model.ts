@@ -1,6 +1,6 @@
 import {ViewModel} from 'atom';
 import {ViewRegistryAdder} from '../atom-abstractions/view-registry-adder';
-import {WorkspaceItemOpener} from '../atom-abstractions/workspace-item-opener';
+import {WorkspaceItemManager} from '../atom-abstractions/workspace-item-manager';
 
 import {HTMLView} from './html-view';
 
@@ -17,7 +17,7 @@ export class HTMLViewModel implements ViewModel {
         private title: string,
         private readonly view: Required<HTMLView>,
         private readonly viewRegistryAdder: ViewRegistryAdder,
-        private readonly workspaceItemOpener: WorkspaceItemOpener,
+        private readonly workspaceItemManager: WorkspaceItemManager,
     ) {}
 
     /** Activate the model; register it and its view with the ViewRegistry */
@@ -25,6 +25,10 @@ export class HTMLViewModel implements ViewModel {
         this.viewRegistryAdder.addViewProvider(HTMLViewModel, () =>
             this.view.render(),
         );
+    }
+
+    get isOpen(): boolean {
+        return this.workspaceItemManager.getPaneItems().includes(this);
     }
 
     /**
@@ -42,16 +46,25 @@ export class HTMLViewModel implements ViewModel {
         this.title = title;
     }
 
+    close(): void {
+        this.workspaceItemManager.hide(this);
+    }
+
+    async open(): Promise<void> {
+        await this.workspaceItemManager.open(this, {
+            split: 'right',
+            searchAllPanes: true,
+            activatePane: false,
+            activateItem: false,
+        });
+    }
+
     /**
      * Render HTML content in an HTML View pane
      *
      * @param content The content to render
      */
-    async render(content: Node): Promise<void> {
+    render(content: Node): void {
         this.view.updateContent(content);
-        await this.workspaceItemOpener.open(this, {
-            split: 'right',
-            searchAllPanes: true,
-        });
     }
 }
