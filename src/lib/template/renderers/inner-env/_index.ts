@@ -13,7 +13,7 @@ export class InnerEnvIndexRenderer implements Renderer {
         if (typeof index !== 'string') return children;
         let parent = astNode.parent;
         while (typeof parent !== 'undefined' && parent?.kind !== 'TextBlock') {
-            parent = astNode.parent;
+            parent = parent.parent;
         }
         if (typeof parent === 'undefined') return children;
         const indexValue = parent.getMetadata(index);
