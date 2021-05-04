@@ -2,8 +2,10 @@
 
 import * as path from 'path';
 
+// This will be a global present on the window object after MathJax is loaded
 declare const MathJax: any;
 
+/** Load MathJax into the document */
 export function loadMathJax(): void {
     const script = document.createElement('script');
     script.addEventListener('load', () => configureMathJax());
@@ -17,13 +19,95 @@ export function loadMathJax(): void {
     }
 }
 
-export function typesetMath(nodes: Node[], callback?: () => unknown): void {
+/**
+ * A simple cache for block math. The key is the source math, the value is the
+ * HTML node containing the typeset math.
+ */
+const blockMathCache: Record<string, Node> = {};
+
+/**
+ * Typeset block math.
+ *
+ * The typesetting result is cached.
+ *
+ * @param mathSource The input math (MathJax compatible) to be typeset
+ * @returns Block element which will contain the typeset math (the actual
+ * typesetting process is asynchronous)
+ */
+export function typesetBlockMath(mathSource: string): HTMLDivElement {
+    const div = document.createElement('div');
+    if (typeof blockMathCache[mathSource] !== 'undefined') {
+        div.classList.add('MathJax_SVG_Display');
+        const span = document.createElement('span');
+        span.classList.add('MathJax_SVG');
+        span.append(blockMathCache[mathSource].cloneNode(true));
+        div.append(span);
+        return div;
+    }
+    const math = document.createElement('script');
+    math.type = 'math/tex; mode=display';
+    math.innerHTML = mathSource;
+    div.appendChild(math);
+    typesetMath([math], () => {
+        const prevElement = math.previousElementSibling;
+        const svg = prevElement?.querySelector('svg');
+        if (svg instanceof SVGSVGElement)
+            blockMathCache[mathSource] = svg.cloneNode(true);
+    });
+    return div;
+}
+
+/**
+ * A simple cache for inline math. The key is the source math, the value is the
+ * HTML node containing the typeset math.
+ */
+const inlineMathCache: Record<string, Node> = {};
+
+/**
+ * Typeset inline math.
+ *
+ * The typesetting result is cached.
+ *
+ * @param mathSource The input math (MathJax compatible) to be typeset
+ * @returns Inline element which will contain the typeset math (the actual
+ * typesetting process is asynchronous)
+ */
+export function typesetInlineMath(mathSource: string): HTMLSpanElement {
+    const span = document.createElement('span');
+    if (typeof inlineMathCache[mathSource] !== 'undefined') {
+        span.classList.add('MathJax_SVG');
+        span.append(inlineMathCache[mathSource].cloneNode(true));
+        return span;
+    }
+    const math = document.createElement('script');
+    math.type = 'math/tex';
+    math.innerHTML = mathSource;
+    span.appendChild(math);
+    typesetMath([math], () => {
+        const prevElement = math.previousElementSibling;
+        const svg = prevElement?.querySelector('svg');
+        if (svg instanceof SVGSVGElement)
+            inlineMathCache[mathSource] = svg.cloneNode(true);
+    });
+    return span;
+}
+
+/**
+ * Typeset math
+ *
+ * @param nodes The HTML nodes containing the math (MathJax compatible) to be
+ * typeset
+ * @param callback An optional callback function to be called after the
+ * typesetting is done
+ */
+function typesetMath(nodes: Node[], callback?: () => unknown): void {
     if (typeof MathJax !== 'undefined' && MathJax !== null) {
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, nodes]);
         if (typeof callback !== 'undefined') MathJax.Hub.Queue(callback);
     }
 }
 
+/** Configure MathJax */
 function configureMathJax(): void {
     let config: Record<string, any> = {};
     try {
