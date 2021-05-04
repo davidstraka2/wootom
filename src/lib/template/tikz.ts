@@ -4,15 +4,28 @@ import {v4 as uuid} from 'uuid';
 import * as path from 'path';
 
 /**
- * Generate SVG from TikZ code
+ * A simple cache for TikZ SVGs. The key is the TikZ source code, the value is
+ * the SVG (as a text) generated from the TikZ source.
+ */
+const tikzCache: Record<string, string> = {};
+
+/**
+ * Generate SVG from TikZ code.
+ *
+ * The SVG result is cached.
  *
  * @param source The input TikZ code
  * @param options Options to pass to the tikzpicture environment (empty string
  * for no options)
- * @returns The SVG generated from the given source
+ * @returns The SVG (as a string) generated from the given source
  * @throws The LaTeX log when LaTeX fails
  */
 export async function tikzToSVG(source: string, options = ''): Promise<string> {
+    const cacheKey = `[${options}][${source}]`;
+    if (typeof tikzCache[cacheKey] !== 'undefined') {
+        console.log('Wootom: Hit TikZ SVG cache.');
+        return tikzCache[cacheKey];
+    }
     const dirname = `.wootom/tikz/${uuid()}`;
     const resDirname = path.resolve(process.cwd(), dirname);
     console.log(`Wootom: Generating TikZ SVG in "${resDirname}"`);
@@ -36,7 +49,9 @@ export async function tikzToSVG(source: string, options = ''): Promise<string> {
         `Wootom: Cleaning up "${resDirname}" after generating TikZ SVG`,
     );
     await fs.remove(dirname);
-    return svg.trim();
+    const finalSVG = svg.trim();
+    tikzCache[cacheKey] = finalSVG;
+    return finalSVG;
 }
 
 /**
