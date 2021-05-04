@@ -56,6 +56,7 @@ export class PreviewSubscriber {
             const documentRoot = this.parser.parse(content);
             const html = this.renderingManager.render(documentRoot);
             this.htmlViewModel.render(html);
+            document.dispatchEvent(new CustomEvent('wootom-preview-rendered'));
         } else {
             console.log('Wootom: Hit content cache.');
         }
