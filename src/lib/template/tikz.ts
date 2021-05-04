@@ -63,7 +63,7 @@ export async function tikzToSVG(source: string, options = ''): Promise<string> {
  * @returns The LaTeX code of the entire document (including the preamble)
  */
 function getLatex(tikz: string, options: string): string {
-    const preamble = `
+    const defaultPreamble = `
         \\usepackage[utf8]{inputenc}
         \\usepackage[T1]{fontenc}
         \\usepackage{libertine}
@@ -78,6 +78,11 @@ function getLatex(tikz: string, options: string): string {
             decorations.markings,
             decorations.pathmorphing
         }`;
+    const customPreamble = (atom.config.get(
+        'wootom.tikzPreamble',
+    ) as string).trim();
+    const preamble =
+        customPreamble.length > 0 ? customPreamble : defaultPreamble;
     return `
         \\documentclass[tikz]{standalone}
         ${preamble}

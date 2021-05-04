@@ -59,6 +59,16 @@ export const config = {
         type: 'string',
         default: '{}',
     },
+    tikzPreamble: {
+        title: 'TikZ Preamble',
+        description:
+            'Set custom LaTeX preamble for generating SVGs from TikZ' +
+            ' environments. Requires a rerender to take effect. Note that' +
+            ' `\\documentclass[tikz]{standalone}` is always automatically' +
+            ' included in the preamble.',
+        type: 'string',
+        default: '',
+    },
     tikzSvgStyle: {
         title: 'TikZ SVG Style',
         description:
