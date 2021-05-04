@@ -1,4 +1,4 @@
-import * as execa from 'execa';
+import execa from 'execa';
 import * as fs from 'fs-extra';
 import {v4 as uuid} from 'uuid';
 import * as path from 'path';

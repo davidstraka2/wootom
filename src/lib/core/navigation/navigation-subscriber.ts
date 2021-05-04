@@ -68,7 +68,6 @@ export class NavigationSubscriber {
     }
 
     private updateEditor(editor?: TextEditor | undefined): void {
-        this.contentCache = undefined;
         this.editorSubscriptions.dispose();
         this.editor = editor;
         if (typeof editor === 'undefined') {

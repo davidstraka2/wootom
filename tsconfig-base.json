@@ -3,6 +3,7 @@
     "target": "ES6",
     "module": "CommonJS",
     "allowUnreachableCode": false,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "noImplicitReturns": true,

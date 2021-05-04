@@ -3,6 +3,8 @@ import {variantRegistry} from '..';
 import {jumpToPosition} from '../../util/editor/jump-to-position';
 import {DocumentPart} from '../ast/document-part';
 import {RenderingManager} from '../rendering/rendering-manager';
+import Fuse from 'fuse.js';
+import {removeAllChildren} from '../../util/html/remove-all-children';
 
 type HeadingTreeNode = {
     node: DocumentPart | undefined;
@@ -10,20 +12,41 @@ type HeadingTreeNode = {
 };
 
 export class TableOfContents {
+    private list: HTMLElement;
+    private searchInput: HTMLInputElement;
+    private searchResults: HTMLElement;
+
     constructor(
         private readonly editor: TextEditor,
         private readonly renderingManager: Required<RenderingManager>,
         private readonly documentParts: DocumentPart[],
-    ) {}
+    ) {
+        this.list = document.createElement('ol');
+        this.searchInput = document.createElement('input');
+        this.searchResults = document.createElement('ul');
+    }
 
     render(): Node {
         const container = document.createDocumentFragment();
         const heading = document.createElement('h2');
         heading.append('Table of Contents');
-        const list = document.createElement('ol');
+        this.searchInput.classList.add('native-key-bindings', 'wootom-search');
+        this.searchInput.setAttribute(
+            'placeholder',
+            'Type here to search in table of contents...',
+        );
+        this.searchInput.addEventListener('input', this.search.bind(this));
         const headingTree = this.constructHeadingTree(this.documentParts);
-        headingTree.forEach(node => list.append(this.renderTreeNode(node)));
-        container.append(heading, list);
+        headingTree.forEach(node =>
+            this.list.append(this.renderTreeNode(node)),
+        );
+        this.searchResults.hidden = true;
+        container.append(
+            heading,
+            this.searchInput,
+            this.list,
+            this.searchResults,
+        );
         return container;
     }
 
@@ -114,5 +137,41 @@ export class TableOfContents {
                 level,
             ),
         ];
+    }
+
+    private renderSearchResults(results: DocumentPart[]): Node[] {
+        return results.map(res => {
+            const listItem = document.createElement('li');
+            listItem.append(this.renderHeading(res));
+            return listItem;
+        });
+    }
+
+    private search(): void {
+        const query = this.searchInput.value.trim();
+        if (query.length === 0) {
+            this.list.hidden = false;
+            this.searchResults.hidden = true;
+            return;
+        }
+        this.list.hidden = true;
+        this.searchResults.hidden = false;
+        removeAllChildren(this.searchResults);
+
+        const fuse = new Fuse(
+            this.documentParts.map(part => ({
+                text: this.renderingManager.render(part).textContent ?? '',
+                part,
+            })),
+            {
+                ignoreLocation: true,
+                keys: ['text'],
+            },
+        );
+
+        const results = fuse.search(query);
+        this.searchResults.append(
+            ...this.renderSearchResults(results.map(res => res.item.part)),
+        );
     }
 }

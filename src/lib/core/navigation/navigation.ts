@@ -19,7 +19,8 @@ export class Navigation {
     }
 
     render(): Node {
-        const container = document.createDocumentFragment();
+        const container = document.createElement('div');
+        container.classList.add('wootom-navigation');
         const heading = document.createElement('h1');
         heading.append('Navigation');
         const toc = new TableOfContents(
