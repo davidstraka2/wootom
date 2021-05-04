@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] (2021-05-04)
+
+### Added
+
+-   Navigation pane with table of contents, table of labels, and fuzzy seach [[#33]]
+-   Cached rendering of TikZ images to SVG (in `!tikz` outer environments) [[#32]]
+-   Caching of MathJax results [[#31]]
+
+### Changed
+
+-   The default keyboard shortcut for `togglePreview` is now `Alt + J` [[#33]]
+-   Improved styling of `.caption` and `.Figure` [[#32]]
+
+### Fixed
+
+-   Infinite loop in rendering causing Atom crash [[#28]]
+-   MathJax failing to typeset when there is only one element to be typeset [[#30]]
+
+### Chores
+
+-   CI testing matrix now additionally contains the minimum supported Atom version [[#29]]
+-   Tweaked TS compiler settings (esModuleInterop) [[#33]]
+
 ## [0.4.0] (2021-04-20)
 
 ### Added
@@ -67,10 +90,17 @@ and this project adheres to
 -   Set up linting with ESLint (and typescript-eslint/eslint-plugin) [[#10]]
 -   Set up CI using GitHub Actions [[#6], [#7], [#9], [#11]]
 
+[0.5.0]: https://github.com/davidstraka2/wootom/compare/v0.4.0-src...v0.5.0-src
 [0.4.0]: https://github.com/davidstraka2/wootom/compare/v0.3.0-src...v0.4.0-src
 [0.3.0]: https://github.com/davidstraka2/wootom/compare/v0.2.0-src...v0.3.0-src
 [0.2.0]: https://github.com/davidstraka2/wootom/compare/v0.1.0-src...v0.2.0-src
 [0.1.0]: https://github.com/davidstraka2/wootom/releases/tag/v0.1.0-src
+[#33]: https://github.com/davidstraka2/wootom/issues/33
+[#32]: https://github.com/davidstraka2/wootom/issues/32
+[#31]: https://github.com/davidstraka2/wootom/issues/31
+[#30]: https://github.com/davidstraka2/wootom/issues/30
+[#29]: https://github.com/davidstraka2/wootom/issues/29
+[#28]: https://github.com/davidstraka2/wootom/issues/28
 [#26]: https://github.com/davidstraka2/wootom/issues/26
 [#25]: https://github.com/davidstraka2/wootom/issues/25
 [#24]: https://github.com/davidstraka2/wootom/issues/24
