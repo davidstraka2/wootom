@@ -4,10 +4,10 @@ import { WorkspaceItemManager } from '../atom-abstractions/workspace-item-manage
 import { HTMLView } from './html-view';
 /** Handles the application logic of the HTML View pane item */
 export declare class HTMLViewModel implements ViewModel {
-    private title;
-    private readonly view;
-    private readonly viewRegistryAdder;
-    private readonly workspaceItemManager;
+    protected title: string;
+    protected readonly view: Required<HTMLView>;
+    protected readonly viewRegistryAdder: ViewRegistryAdder;
+    protected readonly workspaceItemManager: WorkspaceItemManager;
     /**
      * @param title The title of the HTML View pane item
      * @param view The view to use for the model

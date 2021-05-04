@@ -10,4 +10,20 @@ export declare const config: {
         type: string;
         default: string;
     };
+    tikzPreamble: {
+        title: string;
+        description: string;
+        type: string;
+        default: string;
+    };
+    tikzSvgStyle: {
+        title: string;
+        description: string;
+        type: string;
+        default: string;
+        enum: {
+            value: string;
+            description: string;
+        }[];
+    };
 };
