@@ -17,6 +17,16 @@ preview, and more.
 
 [atom]: https://atom.io
 
+## External Dependencies
+
+Wootom relies on a local installation of a TeX distribution to render [TikZ]
+images. The TeX distribution must provide the `latex` and `dvisvgm` commands,
+as well as the following (La)TeX packages: `amsmath`, `amssymb`, `bbding`,
+`fontenc`, `inputenc`, `libertine`, `pgfplots`, `standalone`. If you don't
+intend to use [TikZ] images in your WooWoo documents, you may ignore this.
+
+[tikz]: https://texample.net/tikz/examples/
+
 ## License
 
 Copyright ©‎ David Straka.

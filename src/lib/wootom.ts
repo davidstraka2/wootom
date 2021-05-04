@@ -55,8 +55,30 @@ export const config = {
             'Add custom TeX macros to be passed on to MathJax. The' +
             ' value should be a stringified version of the JSON object that' +
             ' is normally given to the MathJax (v2.x) config as the `Macros`' +
-            ' option',
+            ' option. Might require an editor reload to take effect.',
         type: 'string',
         default: '{}',
+    },
+    tikzSvgStyle: {
+        title: 'TikZ SVG Style',
+        description:
+            'The style of the SVG images generated from TikZ' +
+            ' environments. Requires a rerender to take effect.',
+        type: 'string',
+        default: 'whiteboard',
+        enum: [
+            {
+                value: 'inverted',
+                description: 'Inverted colors',
+            },
+            {
+                value: 'whiteboard',
+                description: 'White background',
+            },
+            {
+                value: 'raw',
+                description: 'No background or color modification',
+            },
+        ],
     },
 };
