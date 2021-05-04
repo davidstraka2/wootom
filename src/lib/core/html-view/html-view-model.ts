@@ -14,10 +14,10 @@ export class HTMLViewModel implements ViewModel {
      * @param workspaceItemOpener To be used to open a new pane with the view
      */
     constructor(
-        private title: string,
-        private readonly view: Required<HTMLView>,
-        private readonly viewRegistryAdder: ViewRegistryAdder,
-        private readonly workspaceItemManager: WorkspaceItemManager,
+        protected title: string,
+        protected readonly view: Required<HTMLView>,
+        protected readonly viewRegistryAdder: ViewRegistryAdder,
+        protected readonly workspaceItemManager: WorkspaceItemManager,
     ) {}
 
     /** Activate the model; register it and its view with the ViewRegistry */

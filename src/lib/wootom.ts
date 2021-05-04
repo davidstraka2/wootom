@@ -1,5 +1,7 @@
 import {CompositeDisposable} from 'atom';
 import {htmlViewModel, parser, renderingManager} from './core';
+import {navigationModel} from './core/navigation/navigation-model';
+import {NavigationSubscriber} from './core/navigation/navigation-subscriber';
 import {PreviewSubscriber} from './core/preview/preview-subscriber';
 import {registerTemplate} from './template';
 import {loadMathJax} from './template/mathjax';
@@ -8,6 +10,12 @@ export const notificationMessage = 'Wootom was called and says hello!';
 
 let subscriptions: CompositeDisposable;
 
+const navigationSubscriber = new NavigationSubscriber(
+    navigationModel,
+    parser,
+    renderingManager,
+    atom.workspace,
+);
 const previewSubscriber = new PreviewSubscriber(
     htmlViewModel,
     parser,
@@ -22,19 +30,22 @@ export function activate(): void {
 
     loadMathJax();
     registerTemplate();
+    navigationModel.activate();
     htmlViewModel.activate();
+    navigationSubscriber.activate();
     previewSubscriber.activate();
 
-    // Register command that calls hello
     subscriptions.add(
         atom.commands.add('atom-workspace', {
             'wootom:hello': () => hello(),
+            'wootom:toggleNavigation': () => navigationSubscriber.toggle(),
             'wootom:togglePreview': () => previewSubscriber.toggle(),
         }),
     );
 }
 
 export function deactivate(): void {
+    navigationSubscriber.deactivate();
     previewSubscriber.deactivate();
     subscriptions.dispose();
 }

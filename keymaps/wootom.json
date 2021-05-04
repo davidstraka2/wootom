@@ -1,5 +1,6 @@
 {
   "atom-workspace": {
-    "alt-n": "wootom:togglePreview"
+    "alt-n": "wootom:toggleNavigation",
+    "alt-j": "wootom:togglePreview"
   }
 }

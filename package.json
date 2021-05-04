@@ -26,6 +26,7 @@
   "activationCommands": {
     "atom-workspace": [
       "wootom:hello",
+      "wootom:toggleNavigation",
       "wootom:togglePreview"
     ]
   },

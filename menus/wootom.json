@@ -2,6 +2,10 @@
   "context-menu": {
     "atom-text-editor": [
       {
+        "label": "Wootom: Toggle Navigation",
+        "command": "wootom:toggleNavigation"
+      },
+      {
         "label": "Wootom: Toggle Preview",
         "command": "wootom:togglePreview"
       }
@@ -14,6 +18,10 @@
         {
           "label": "Wootom",
           "submenu": [
+            {
+              "label": "Toggle Navigation",
+              "command": "wootom:toggleNavigation"
+            },
             {
               "label": "Toggle Preview",
               "command": "wootom:togglePreview"
