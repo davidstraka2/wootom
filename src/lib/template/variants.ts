@@ -16,11 +16,11 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('DocumentObject', 'Question', 'question');
     variantRegistry.setVariant('DocumentObject', 'Table', 'table');
 
-    variantRegistry.setVariant('OuterEnv', 'align', 'align-math'); // TODO
+    variantRegistry.setVariant('OuterEnv', 'align', 'align-math');
     variantRegistry.setVariant('OuterEnv', 'caption', 'caption');
     variantRegistry.setVariant('OuterEnv', 'codeblock', 'codeblock');
     variantRegistry.setVariant('OuterEnv', 'enumerate', 'enumerate'); // TODO
-    variantRegistry.setVariant('OuterEnv', 'equation', 'block-math'); // TODO
+    variantRegistry.setVariant('OuterEnv', 'equation', 'block-math');
     variantRegistry.setVariant('OuterEnv', 'sage', 'sage');
     variantRegistry.setVariant('OuterEnv', 'solution', 'solution');
     variantRegistry.setVariant('OuterEnv', 'tabular', 'tabular');
@@ -35,7 +35,7 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('InnerEnv', 'eqref', 'eqref'); // TODO
     variantRegistry.setVariant('InnerEnv', 'footnote', 'footnote'); // TODO
     variantRegistry.setVariant('InnerEnv', 'item', 'item'); // TODO
-    variantRegistry.setVariant('InnerEnv', 'math', 'inline-math'); // TODO
+    variantRegistry.setVariant('InnerEnv', 'math', 'inline-math');
     variantRegistry.setVariant('InnerEnv', 'notion', 'b');
     variantRegistry.setVariant('InnerEnv', 'quoted', 'quoted');
     variantRegistry.setVariant('InnerEnv', 'reference', 'reference'); // TODO

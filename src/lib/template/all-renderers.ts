@@ -17,6 +17,7 @@ import {DocumentPartH3Renderer} from './renderers/document-part/h3';
 import {InnerEnvBRenderer} from './renderers/inner-env/b';
 import {InnerEnvCodeRenderer} from './renderers/inner-env/code';
 import {DefaultInnerEnvRenderer} from './renderers/inner-env/default';
+import {InnerEnvFootnoteRenderer} from './renderers/inner-env/footnote';
 import {InnerEnvIRenderer} from './renderers/inner-env/i';
 import {InnerEnvInlineMathRenderer} from './renderers/inner-env/inline-math';
 import {InnerEnvQuotedRenderer} from './renderers/inner-env/quoted';
@@ -76,6 +77,7 @@ export function registerTemplateRenderers(): void {
     rendererRegistry.setRenderer(new DefaultInnerEnvRenderer());
     rendererRegistry.setRenderer(new InnerEnvCodeRenderer());
     rendererRegistry.setRenderer(new InnerEnvIRenderer());
+    rendererRegistry.setRenderer(new InnerEnvFootnoteRenderer());
     rendererRegistry.setRenderer(new InnerEnvInlineMathRenderer());
     rendererRegistry.setRenderer(new InnerEnvBRenderer());
     rendererRegistry.setRenderer(new InnerEnvQuotedRenderer());

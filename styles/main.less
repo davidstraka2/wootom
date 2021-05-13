@@ -1,6 +1,7 @@
 .wootom-html-viewer {
     --color-translucent-red: rgba(255, 0, 0, 0.4);
     --color-translucent-blue: rgba(55, 106, 247, 0.4);
+    --color-translucent-yellow: rgba(255, 255, 0, 0.4);
     --color-white: #fff;
 
     padding: 1rem;
@@ -79,6 +80,24 @@
             padding: 0 1rem;
             min-width: 5rem;
             width: 100%;
+        }
+    }
+
+    .wootom-footnote {
+        background-color: var(--color-translucent-yellow);
+
+        &:not(.wootom-footnote-shown) > *:not(.wootom-footnote-controls) {
+            display: none;
+        }
+
+        > .wootom-footnote-controls::before {
+            content: '(*\00a0▷)';
+            cursor: pointer;
+        }
+
+        &.wootom-footnote-shown > .wootom-footnote-controls::before {
+            content: '(*\00a0◁)';
+            margin-right: 0.5em;
         }
     }
 }
