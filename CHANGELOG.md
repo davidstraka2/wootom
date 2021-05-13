@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] (2021-05-13)
+
+### Added
+
+-   FIT Template snippets [[#37]]
+-   Rendering of the `footnote` inner environment and partial rendering of the
+    `cite`, `eqref`, and `reference` inner environments [[#39]]
+
+### Changed
+
+-   Improved WooWoo syntax highlighting grammar (better comments, `@` inner
+    environment shorthand support) [[#35]]
+
+### Fixed
+
+-   Properly clear custom MathJax typesetting pre-queue [[#38]]
+
+### Chores
+
+-   Updated project description [[#36]]
+
 ## [0.5.0] (2021-05-04)
 
 ### Added
@@ -90,11 +111,17 @@ and this project adheres to
 -   Set up linting with ESLint (and typescript-eslint/eslint-plugin) [[#10]]
 -   Set up CI using GitHub Actions [[#6], [#7], [#9], [#11]]
 
+[0.6.0]: https://github.com/davidstraka2/wootom/compare/v0.5.0-src...v0.6.0-src
 [0.5.0]: https://github.com/davidstraka2/wootom/compare/v0.4.0-src...v0.5.0-src
 [0.4.0]: https://github.com/davidstraka2/wootom/compare/v0.3.0-src...v0.4.0-src
 [0.3.0]: https://github.com/davidstraka2/wootom/compare/v0.2.0-src...v0.3.0-src
 [0.2.0]: https://github.com/davidstraka2/wootom/compare/v0.1.0-src...v0.2.0-src
 [0.1.0]: https://github.com/davidstraka2/wootom/releases/tag/v0.1.0-src
+[#39]: https://github.com/davidstraka2/wootom/issues/39
+[#38]: https://github.com/davidstraka2/wootom/issues/38
+[#37]: https://github.com/davidstraka2/wootom/issues/37
+[#36]: https://github.com/davidstraka2/wootom/issues/36
+[#35]: https://github.com/davidstraka2/wootom/issues/35
 [#33]: https://github.com/davidstraka2/wootom/issues/33
 [#32]: https://github.com/davidstraka2/wootom/issues/32
 [#31]: https://github.com/davidstraka2/wootom/issues/31
