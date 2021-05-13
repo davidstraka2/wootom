@@ -94,7 +94,7 @@ export function typesetInlineMath(mathSource: string): HTMLSpanElement {
 }
 
 /** A queue containing items to be later added to the MathJax Queue */
-const mathJaxPreQueue: unknown[] = [];
+let mathJaxPreQueue: unknown[] = [];
 
 /**
  * Add math to the typesetting queue
@@ -114,6 +114,7 @@ function typesetMath(nodes: Node[], callback?: () => unknown): void {
 /** Trigger typesetting of all math in the typesetting queue */
 function typesetAllMath(): void {
     mathJaxPreQueue.forEach(item => MathJax.Hub.Queue(item));
+    mathJaxPreQueue = [];
 }
 
 /** Configure MathJax */
