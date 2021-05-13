@@ -1,0 +1,338 @@
+'.text.woo':
+
+  # Document Parts
+
+  'Chapter':
+    'prefix': 'chap'
+    'body': """
+    .Chapter $1
+      label: $2
+
+    $3
+    """
+
+  'Section':
+    'prefix': 'sec'
+    'body': """
+    .Section $1
+      label: $2
+
+    $3
+    """
+
+  'Subsection':
+    'prefix': 'subsec'
+    'body': """
+    .Subsection $1
+      label: $2
+
+    $3
+    """
+
+  # Objects
+
+  'Definition':
+    'prefix': 'def'
+    'body': """
+    .Definition:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Corollary':
+    'prefix': 'coro'
+    'body': """
+    .Corollary:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Lemma':
+    'prefix': 'lem'
+    'body': """
+    .Lemma:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Theorem':
+    'prefix': 'thm'
+    'body': """
+    .Theorem:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Proof':
+    'prefix': 'proof'
+    'body': """
+    .Proof:
+      title: $1
+
+      $2
+
+    """
+
+  'Remark':
+    'prefix': 'rem'
+    'body': """
+    .Remark:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Example':
+    'prefix': 'ex'
+    'body': """
+    .Example:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Figure':
+    'prefix': 'fig'
+    'body': """
+    .Figure:
+      label: $1
+
+      $2
+
+      .caption:
+
+        $3
+
+    """
+
+  'Question':
+    'prefix': 'que'
+    'body': """
+    .Question:
+
+      $1
+
+      .solution:
+
+        $2
+
+    """
+
+  'Table':
+    'prefix': 'tabl'
+    'body': """
+    .Table:
+      label: $1
+
+      !tabular:
+
+        $2
+
+      .caption:
+
+        $3
+
+    """
+
+  # Outer Environments
+
+  'Align':
+    'prefix': 'ali'
+    'body': """
+    .align:
+
+      $1
+
+    """
+
+  'Caption':
+    'prefix': 'cap'
+    'body': """
+    .caption:
+
+      $1
+
+    """
+
+  'Codeblock':
+    'prefix': 'codebl'
+    'body': """
+    !codeblock:
+      code: $1
+
+      $2
+
+    """
+
+  'Enumerate':
+    'prefix': 'enum'
+    'body': """
+    .enumerate:
+      type: a
+
+      * $1
+
+    """
+
+  'Equation':
+    'prefix': 'eq'
+    'body': """
+    .equation:
+      label: $1
+
+      $2
+
+    """
+
+  'Image':
+    'prefix': 'img'
+    'body': """
+    .image:
+      $1
+    """
+
+  'Itemize':
+    'prefix': 'itemi'
+    'body': """
+    .itemize:
+
+      * $1
+
+    """
+
+  'Quote':
+    'prefix': 'quo'
+    'body': """
+    .quote:
+      author: $1
+      link: $2
+
+      $3
+
+    """
+
+  'Sage':
+    'prefix': 'sage'
+    'body': """
+    !sage:
+
+      $1
+
+    """
+
+  'Solution':
+    'prefix': 'sol'
+    'body': """
+    .solution:
+
+      $1
+
+    """
+
+  'Tabular':
+    'prefix': 'tabu'
+    'body': """
+    !tabular:
+
+      $1
+
+    """
+
+  'Tikz':
+    'prefix': 'tikz'
+    'body': """
+    !tikz:
+
+      $1
+
+    """
+
+  # Inner Environments
+
+  'Cite':
+    'prefix': 'cit'
+    'body': """
+    "$1".cite
+    """
+
+  'Code':
+    'prefix': 'code'
+    'body': """
+    "$1".code
+    """
+
+  'Emphasize':
+    'prefix': 'emph'
+    'body': """
+    "$1".emphasize
+    """
+
+  'Eqref':
+    'prefix': 'eqr'
+    'body': """
+    .eqref:$1
+    """
+
+  'Footnote':
+    'prefix': 'foot'
+    'body': """
+    "$1".footnote
+    """
+
+  'Item':
+    'prefix': 'item'
+    'body': """
+    "$1".item
+    """
+
+  'Math':
+    'prefix': 'math'
+    'body': """
+    "$1".math
+    """
+
+  'Notion':
+    'prefix': 'noti'
+    'body': """
+    "$1".notion
+    """
+
+  'Quoted':
+    'prefix': 'quoted'
+    'body': """
+    "$1".quoted
+    """
+
+  'Reference':
+    'prefix': 'ref'
+    'body': """
+    .reference:$1
+    """
+
+  'Todo':
+    'prefix': 'tod'
+    'body': """
+    "$1".todo
+    """
