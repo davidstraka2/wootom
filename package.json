@@ -1,6 +1,6 @@
 {
   "name": "wootom",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "author": {
     "name": "David Straka",
     "email": "davidstraka.public@gmail.com"
@@ -37,7 +37,8 @@
     "format:fix": "prettier --write .",
     "lint:check": "eslint src --max-warnings=0",
     "lint:fix": "eslint src --max-warnings=0 --fix",
-    "pack": "node scripts/pack.mjs"
+    "pack": "node scripts/pack.mjs",
+    "test": "atom --test spec"
   },
   "devDependencies": {
     "@types/atom": "^1.40.7",
