@@ -13,6 +13,7 @@ patterns: [
     {include: '#innerEnvironmentVerbose'}
     {include: '#annotation'}
     {include: '#reference'}
+    {include: '#indexedReference'}
     {include: '#inlineMath'}
     {include: '#tailMetablocks'}
 ]
@@ -92,6 +93,13 @@ repository:
     }
     reference: {
         match: '(")(#)([a-z][\\w-]*)'
+        captures:
+            1: name: 'keyword.operator.foo'
+            2: name: 'keyword.operator.foo'
+            3: name: 'storage.type.foo'
+    }
+    indexedReference: {
+        match: '(")(@)(\\d+)'
         captures:
             1: name: 'keyword.operator.foo'
             2: name: 'keyword.operator.foo'
