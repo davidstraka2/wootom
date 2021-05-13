@@ -15,14 +15,17 @@ import {DocumentPartH1Renderer} from './renderers/document-part/h1';
 import {DocumentPartH2Renderer} from './renderers/document-part/h2';
 import {DocumentPartH3Renderer} from './renderers/document-part/h3';
 import {InnerEnvBRenderer} from './renderers/inner-env/b';
+import {InnerEnvCiteRenderer} from './renderers/inner-env/cite';
 import {InnerEnvCodeRenderer} from './renderers/inner-env/code';
 import {DefaultInnerEnvRenderer} from './renderers/inner-env/default';
+import {InnerEnvEqrefRenderer} from './renderers/inner-env/eqref';
 import {InnerEnvFootnoteRenderer} from './renderers/inner-env/footnote';
 import {InnerEnvIRenderer} from './renderers/inner-env/i';
 import {InnerEnvInlineMathRenderer} from './renderers/inner-env/inline-math';
 import {InnerEnvQuotedRenderer} from './renderers/inner-env/quoted';
+import {InnerEnvReferenceRenderer} from './renderers/inner-env/reference';
 import {InnerEnvIndexRenderer} from './renderers/inner-env/_index';
-import {InnerEnvReferenceRenderer} from './renderers/inner-env/_reference';
+import {InnerEnvUReferenceRenderer} from './renderers/inner-env/_reference';
 import {DocumentRootRenderer} from './renderers/other/document-root';
 import {IndentedBlockRenderer} from './renderers/other/indented-block';
 import {InlineMathRenderer} from './renderers/other/inline-math';
@@ -75,13 +78,16 @@ export function registerTemplateRenderers(): void {
     rendererRegistry.setRenderer(new OuterEnvQuoteRenderer());
 
     rendererRegistry.setRenderer(new DefaultInnerEnvRenderer());
+    rendererRegistry.setRenderer(new InnerEnvCiteRenderer());
     rendererRegistry.setRenderer(new InnerEnvCodeRenderer());
     rendererRegistry.setRenderer(new InnerEnvIRenderer());
+    rendererRegistry.setRenderer(new InnerEnvEqrefRenderer());
     rendererRegistry.setRenderer(new InnerEnvFootnoteRenderer());
     rendererRegistry.setRenderer(new InnerEnvInlineMathRenderer());
     rendererRegistry.setRenderer(new InnerEnvBRenderer());
     rendererRegistry.setRenderer(new InnerEnvQuotedRenderer());
+    rendererRegistry.setRenderer(new InnerEnvReferenceRenderer());
 
     rendererRegistry.setRenderer(new InnerEnvIndexRenderer());
-    rendererRegistry.setRenderer(new InnerEnvReferenceRenderer());
+    rendererRegistry.setRenderer(new InnerEnvUReferenceRenderer());
 }

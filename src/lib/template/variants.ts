@@ -29,18 +29,18 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('OuterEnv', 'itemize', 'itemize'); // TODO
     variantRegistry.setVariant('OuterEnv', 'quote', 'quote');
 
-    variantRegistry.setVariant('InnerEnv', 'cite', 'cite'); // TODO
+    variantRegistry.setVariant('InnerEnv', 'cite', 'cite');
     variantRegistry.setVariant('InnerEnv', 'code', 'code');
     variantRegistry.setVariant('InnerEnv', 'emphasize', 'i');
-    variantRegistry.setVariant('InnerEnv', 'eqref', 'eqref'); // TODO
-    variantRegistry.setVariant('InnerEnv', 'footnote', 'footnote'); // TODO
+    variantRegistry.setVariant('InnerEnv', 'eqref', 'eqref');
+    variantRegistry.setVariant('InnerEnv', 'footnote', 'footnote');
     variantRegistry.setVariant('InnerEnv', 'item', 'item'); // TODO
     variantRegistry.setVariant('InnerEnv', 'math', 'inline-math');
     variantRegistry.setVariant('InnerEnv', 'notion', 'b');
     variantRegistry.setVariant('InnerEnv', 'quoted', 'quoted');
-    variantRegistry.setVariant('InnerEnv', 'reference', 'reference'); // TODO
+    variantRegistry.setVariant('InnerEnv', 'reference', 'reference');
     variantRegistry.setVariant('InnerEnv', 'todo', 'todo'); // TODO
 
     variantRegistry.setVariant('InnerEnv', '_index', '_index');
-    variantRegistry.setVariant('InnerEnv', '_reference', '_reference'); // TODO
+    variantRegistry.setVariant('InnerEnv', '_reference', '_reference');
 }

@@ -3,11 +3,14 @@ import {Renderer} from '../../../core/rendering/renderer';
 import {RenderingManager} from '../../../core/rendering/rendering-manager';
 import {WooElementKind} from '../../../util/types/woo';
 
-export class InnerEnvUReferenceRenderer implements Renderer {
+/** Renderer of the cite inner environment */
+export class InnerEnvCiteRenderer implements Renderer {
     readonly kind: WooElementKind = 'InnerEnv';
-    readonly abstractVariant = '_reference';
+    readonly abstractVariant = 'cite';
 
     render(renderingManager: RenderingManager, astNode: ASTNode): Node {
-        return renderingManager.render(...astNode.children);
+        const cite = document.createElement('cite');
+        cite.append('[', renderingManager.render(...astNode.children), ']');
+        return cite;
     }
 }
