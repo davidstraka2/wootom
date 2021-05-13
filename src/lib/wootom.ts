@@ -74,9 +74,9 @@ export const config = {
         title: 'TikZ Preamble',
         description:
             'Set custom LaTeX preamble for generating SVGs from TikZ' +
-            ' environments. Requires a rerender to take effect. Note that' +
-            ' `\\documentclass[tikz]{standalone}` is always automatically' +
-            ' included in the preamble.',
+            ' environments. Might require an editor reload to take effect.' +
+            ' Note that `\\documentclass[tikz]{standalone}` is always' +
+            ' automatically included in the preamble.',
         type: 'string',
         default: '',
     },
