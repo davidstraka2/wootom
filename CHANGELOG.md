@@ -6,13 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] (2021-06-24)
+
+### Changed
+
+-   Improve the display of errors raised during TikZ SVG creation [[#42]]
+
+### Fixed
+
+-   Use the OS tmp directory for working with files related to TikZ SVG creation
+    [[#41]]
+
 ## [0.6.0] (2021-05-13)
 
 ### Added
 
 -   FIT Template snippets [[#37]]
 -   Rendering of the `footnote` inner environment and partial rendering of the
-    `cite`, `eqref`, and `reference` inner environments [[#39]]
+    `.cite`, `.eqref`, and `.reference` inner environments [[#39]]
 
 ### Changed
 
@@ -31,8 +42,10 @@ and this project adheres to
 
 ### Added
 
--   Navigation pane with table of contents, table of labels, and fuzzy seach [[#33]]
--   Cached rendering of TikZ images to SVG (in `!tikz` outer environments) [[#32]]
+-   Navigation pane with table of contents, table of labels, and fuzzy search
+    [[#33]]
+-   Cached rendering of TikZ images to SVG (in `!tikz` outer environments)
+    [[#32]]
 -   Caching of MathJax results [[#31]]
 
 ### Changed
@@ -43,11 +56,13 @@ and this project adheres to
 ### Fixed
 
 -   Infinite loop in rendering causing Atom crash [[#28]]
--   MathJax failing to typeset when there is only one element to be typeset [[#30]]
+-   MathJax failing to typeset when there is only one element to be typeset
+    [[#30]]
 
 ### Chores
 
--   CI testing matrix now additionally contains the minimum supported Atom version [[#29]]
+-   CI testing matrix now additionally contains the minimum supported Atom
+    version [[#29]]
 -   Tweaked TS compiler settings (esModuleInterop) [[#33]]
 
 ## [0.4.0] (2021-04-20)
@@ -111,12 +126,15 @@ and this project adheres to
 -   Set up linting with ESLint (and typescript-eslint/eslint-plugin) [[#10]]
 -   Set up CI using GitHub Actions [[#6], [#7], [#9], [#11]]
 
+[0.6.1]: https://github.com/davidstraka2/wootom/compare/v0.6.0-src...v0.6.1-src
 [0.6.0]: https://github.com/davidstraka2/wootom/compare/v0.5.0-src...v0.6.0-src
 [0.5.0]: https://github.com/davidstraka2/wootom/compare/v0.4.0-src...v0.5.0-src
 [0.4.0]: https://github.com/davidstraka2/wootom/compare/v0.3.0-src...v0.4.0-src
 [0.3.0]: https://github.com/davidstraka2/wootom/compare/v0.2.0-src...v0.3.0-src
 [0.2.0]: https://github.com/davidstraka2/wootom/compare/v0.1.0-src...v0.2.0-src
 [0.1.0]: https://github.com/davidstraka2/wootom/releases/tag/v0.1.0-src
+[#42]: https://github.com/davidstraka2/wootom/issues/42
+[#41]: https://github.com/davidstraka2/wootom/issues/41
 [#39]: https://github.com/davidstraka2/wootom/issues/39
 [#38]: https://github.com/davidstraka2/wootom/issues/38
 [#37]: https://github.com/davidstraka2/wootom/issues/37
