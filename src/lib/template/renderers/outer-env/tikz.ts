@@ -50,12 +50,18 @@ export class OuterEnvTikzRenderer implements Renderer {
      * @param errorLog The error log
      * @returns A new component
      */
-    private getErrorDetail(errorLog: string): Node {
+    private getErrorDetail(error: string | Error): Node {
         const details = document.createElement('details');
+        details.classList.add('wootom-error-details');
         const summary = document.createElement('summary');
         summary.append('Error generating TikZ SVG.');
+        summary.title = 'Click to toggle error details';
         const pre = document.createElement('pre');
-        pre.append(errorLog);
+        if (typeof error === 'string') {
+            pre.append(error);
+        } else {
+            pre.append(error.stack ?? error.toString());
+        }
         details.append(summary, pre);
         return details;
     }
