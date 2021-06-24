@@ -2,6 +2,7 @@ import execa from 'execa';
 import * as fs from 'fs-extra';
 import {v4 as uuid} from 'uuid';
 import * as path from 'path';
+import * as os from 'os';
 
 /**
  * A simple cache for TikZ SVGs. The key is the TikZ source code, the value is
@@ -26,9 +27,8 @@ export async function tikzToSVG(source: string, options = ''): Promise<string> {
         console.log('Wootom: Hit TikZ SVG cache.');
         return tikzCache[cacheKey];
     }
-    const dirname = `.wootom/tikz/${uuid()}`;
-    const resDirname = path.resolve(process.cwd(), dirname);
-    console.log(`Wootom: Generating TikZ SVG in "${resDirname}"`);
+    const dirname = path.resolve(os.tmpdir(), `.wootom/tikz/${uuid()}`);
+    console.log(`Wootom: Generating TikZ SVG in "${dirname}"`);
     await fs.emptyDir(dirname);
     const filename = `main`;
     await fs.writeFile(`${dirname}/${filename}.tex`, getLatex(source, options));
@@ -39,15 +39,13 @@ export async function tikzToSVG(source: string, options = ''): Promise<string> {
     } catch (err) {
         const log = await fs.readFile(`${dirname}/${filename}.log`, 'utf-8');
         console.log(
-            `Wootom: Cleaning up "${resDirname}" after failing to generate TikZ SVG`,
+            `Wootom: Cleaning up "${dirname}" after failing to generate TikZ SVG`,
         );
         await fs.remove(dirname);
         throw log;
     }
     const svg = await fs.readFile(`${dirname}/${filename}.svg`, 'utf-8');
-    console.log(
-        `Wootom: Cleaning up "${resDirname}" after generating TikZ SVG`,
-    );
+    console.log(`Wootom: Cleaning up "${dirname}" after generating TikZ SVG`);
     await fs.remove(dirname);
     const finalSVG = svg.trim();
     tikzCache[cacheKey] = finalSVG;
