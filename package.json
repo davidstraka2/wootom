@@ -33,6 +33,7 @@
   "atomTestRunner": "atom-jasmine3-test-runner",
   "scripts": {
     "build": "tsc --build src/lib src/spec",
+    "clean": "node scripts/clean.mjs",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint:check": "eslint src --max-warnings=0",
