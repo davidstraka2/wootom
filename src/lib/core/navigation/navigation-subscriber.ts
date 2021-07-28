@@ -77,7 +77,10 @@ export class NavigationSubscriber {
         console.log('Wootom: Subscribing to new editor.');
         this.editorSubscriptions.add(
             editor.onDidSave(this.updateContent.bind(this)),
-            editor.onDidStopChanging(this.updateContent.bind(this)),
+            editor.onDidStopChanging(() => {
+                if (atom.config.get('wootom.updateOnType') as boolean)
+                    this.updateContent();
+            }),
         );
         this.updateContent();
     }

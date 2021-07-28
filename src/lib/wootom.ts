@@ -102,4 +102,13 @@ export const config = {
             },
         ],
     },
+    updateOnType: {
+        title: 'Update on Type',
+        description:
+            'Update the WooWoo HTML preview and the Navigation panes (also)' +
+            ' on type. If `false`, the preview will be updated only when a' +
+            ' new file is opened and when a file is saved.',
+        type: 'boolean',
+        default: true,
+    },
 };
