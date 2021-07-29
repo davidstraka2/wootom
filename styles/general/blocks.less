@@ -1,0 +1,26 @@
+@import 'ui-variables';
+
+.wootom-html-viewer {
+    .block(@title-bg-color, @title-color) {
+        border: 1px solid @title-bg-color;
+        margin: 0.5rem 0;
+
+        > * {
+            padding: 0.35rem 1rem;
+        }
+
+        > .wootom-title {
+            background-color: @title-bg-color;
+            color: @title-color;
+            margin: 0;
+        }
+    }
+
+    .wootom-error-block {
+        .block(@background-color-error, @text-color-highlight);
+    }
+
+    .wootom-info-block {
+        .block(@background-color-info, @text-color-highlight);
+    }
+}
