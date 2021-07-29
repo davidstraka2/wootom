@@ -103,8 +103,11 @@
     }
 
     .wootom-footnote {
-        background-color: @ui-site-color-5;
-        color: contrast(@ui-site-color-5);
+        color: @text-color-subtle;
+
+        &:hover {
+            color: @text-color-selected;
+        }
 
         &:not(.wootom-footnote-shown) > *:not(.wootom-footnote-controls) {
             display: none;
