@@ -40,7 +40,9 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('InnerEnv', 'notion', 'b');
     variantRegistry.setVariant('InnerEnv', 'quoted', 'quoted');
     variantRegistry.setVariant('InnerEnv', 'reference', 'reference');
+    variantRegistry.setVariant('InnerEnv', 'small', 'small');
     variantRegistry.setVariant('InnerEnv', 'todo', 'todo'); // TODO
+    variantRegistry.setVariant('InnerEnv', 'underline', 'u');
 
     variantRegistry.setVariant('InnerEnv', '_index', '_index');
     variantRegistry.setVariant('InnerEnv', '_reference', '_reference');

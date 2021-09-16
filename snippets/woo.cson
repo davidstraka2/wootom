@@ -340,8 +340,20 @@
     .reference:$1
     """
 
+  'Small':
+    'prefix': 'sma'
+    'body': """
+    "$1".small
+    """
+
   'Todo':
     'prefix': 'tod'
     'body': """
     "$1".todo
+    """
+
+  'Underline':
+    'prefix': 'u'
+    'body': """
+    "$1".underline
     """

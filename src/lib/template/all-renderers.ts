@@ -24,6 +24,8 @@ import {InnerEnvIRenderer} from './renderers/inner-env/i';
 import {InnerEnvInlineMathRenderer} from './renderers/inner-env/inline-math';
 import {InnerEnvQuotedRenderer} from './renderers/inner-env/quoted';
 import {InnerEnvReferenceRenderer} from './renderers/inner-env/reference';
+import {InnerEnvSmallRenderer} from './renderers/inner-env/small';
+import {InnerEnvURenderer} from './renderers/inner-env/u';
 import {InnerEnvIndexRenderer} from './renderers/inner-env/_index';
 import {InnerEnvUReferenceRenderer} from './renderers/inner-env/_reference';
 import {DocumentRootRenderer} from './renderers/other/document-root';
@@ -89,6 +91,8 @@ export function registerTemplateRenderers(): void {
     rendererRegistry.setRenderer(new InnerEnvBRenderer());
     rendererRegistry.setRenderer(new InnerEnvQuotedRenderer());
     rendererRegistry.setRenderer(new InnerEnvReferenceRenderer());
+    rendererRegistry.setRenderer(new InnerEnvSmallRenderer());
+    rendererRegistry.setRenderer(new InnerEnvURenderer());
 
     rendererRegistry.setRenderer(new InnerEnvIndexRenderer());
     rendererRegistry.setRenderer(new InnerEnvUReferenceRenderer());
