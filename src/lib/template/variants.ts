@@ -21,6 +21,7 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('OuterEnv', 'codeblock', 'codeblock');
     variantRegistry.setVariant('OuterEnv', 'enumerate', 'enumerate'); // TODO
     variantRegistry.setVariant('OuterEnv', 'equation', 'block-math');
+    variantRegistry.setVariant('OuterEnv', 'gather', 'gather-math');
     variantRegistry.setVariant('OuterEnv', 'sage', 'sage');
     variantRegistry.setVariant('OuterEnv', 'solution', 'solution');
     variantRegistry.setVariant('OuterEnv', 'tabular', 'tabular');
