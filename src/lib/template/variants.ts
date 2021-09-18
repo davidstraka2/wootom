@@ -28,7 +28,6 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('OuterEnv', 'equation', 'block-math');
     variantRegistry.setVariant('OuterEnv', 'gather', 'gather-math');
     variantRegistry.setVariant('OuterEnv', 'sage', 'sage');
-    variantRegistry.setVariant('OuterEnv', 'solution', 'solution');
     variantRegistry.setVariant('OuterEnv', 'tabular', 'tabular');
     variantRegistry.setVariant('OuterEnv', 'tikz', 'tikz');
     variantRegistry.setVariant('OuterEnv', 'image', 'image'); // TODO

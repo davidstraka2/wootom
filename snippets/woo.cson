@@ -167,12 +167,9 @@
     'prefix': 'que'
     'body': """
     .Question:
+      solution: $1
 
-      $1
-
-      .solution:
-
-        $2
+      $2
 
     """
 
@@ -306,15 +303,6 @@
     'prefix': 'sage'
     'body': """
     !sage:
-
-      $1
-
-    """
-
-  'Solution (outer env)':
-    'prefix': 'solu'
-    'body': """
-    .solution:
 
       $1
 

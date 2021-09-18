@@ -46,7 +46,6 @@ import {DefaultOuterEnvRenderer} from './renderers/outer-env/default';
 import {OuterEnvGatherMathRenderer} from './renderers/outer-env/gather-math';
 import {OuterEnvQuoteRenderer} from './renderers/outer-env/quote';
 import {OuterEnvSageRenderer} from './renderers/outer-env/sage';
-import {OuterEnvSolutionRenderer} from './renderers/outer-env/solution';
 import {OuterEnvTabularRenderer} from './renderers/outer-env/tabular';
 import {OuterEnvTikzRenderer} from './renderers/outer-env/tikz';
 
@@ -86,7 +85,6 @@ export function registerTemplateRenderers(): void {
     rendererRegistry.setRenderer(new OuterEnvBlockMathRenderer());
     rendererRegistry.setRenderer(new OuterEnvGatherMathRenderer());
     rendererRegistry.setRenderer(new OuterEnvSageRenderer());
-    rendererRegistry.setRenderer(new OuterEnvSolutionRenderer());
     rendererRegistry.setRenderer(new OuterEnvTabularRenderer());
     rendererRegistry.setRenderer(new OuterEnvTikzRenderer());
     rendererRegistry.setRenderer(new OuterEnvQuoteRenderer());
