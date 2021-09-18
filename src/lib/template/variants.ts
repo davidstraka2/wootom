@@ -5,16 +5,21 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('DocumentPart', 'Section', 'h2');
     variantRegistry.setVariant('DocumentPart', 'Subsection', 'h3');
 
+    variantRegistry.setVariant('DocumentObject', 'Algorithm', 'algorithm');
     variantRegistry.setVariant('DocumentObject', 'Definition', 'definition');
     variantRegistry.setVariant('DocumentObject', 'Corollary', 'corollary');
     variantRegistry.setVariant('DocumentObject', 'Lemma', 'lemma');
+    variantRegistry.setVariant('DocumentObject', 'Observation', 'observation');
+    variantRegistry.setVariant('DocumentObject', 'Proposition', 'proposition');
     variantRegistry.setVariant('DocumentObject', 'Theorem', 'theorem');
     variantRegistry.setVariant('DocumentObject', 'Proof', 'proof');
     variantRegistry.setVariant('DocumentObject', 'Remark', 'remark');
     variantRegistry.setVariant('DocumentObject', 'Example', 'example');
     variantRegistry.setVariant('DocumentObject', 'Figure', 'figure');
     variantRegistry.setVariant('DocumentObject', 'Question', 'question');
+    variantRegistry.setVariant('DocumentObject', 'Solution', 'solution');
     variantRegistry.setVariant('DocumentObject', 'Table', 'table');
+    variantRegistry.setVariant('DocumentObject', 'Warning', 'warning');
 
     variantRegistry.setVariant('OuterEnv', 'align', 'align-math');
     variantRegistry.setVariant('OuterEnv', 'caption', 'caption');

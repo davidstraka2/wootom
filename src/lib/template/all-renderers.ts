@@ -1,15 +1,20 @@
 import {rendererRegistry} from '../core';
+import {DocumentObjectAlgorithmRenderer} from './renderers/document-object/algorithm';
 import {DocumentObjectCorollaryRenderer} from './renderers/document-object/corollary';
 import {DefaultDocumentObjectRenderer} from './renderers/document-object/default';
 import {DocumentObjectDefinitionRenderer} from './renderers/document-object/definition';
 import {DocumentObjectExampleRenderer} from './renderers/document-object/example';
 import {DocumentObjectFigureRenderer} from './renderers/document-object/figure';
 import {DocumentObjectLemmaRenderer} from './renderers/document-object/lemma';
+import {DocumentObjectObservationRenderer} from './renderers/document-object/observation';
 import {DocumentObjectProofRenderer} from './renderers/document-object/proof';
+import {DocumentObjectPropositionRenderer} from './renderers/document-object/proposition';
 import {DocumentObjectQuestionRenderer} from './renderers/document-object/question';
 import {DocumentObjectRemarkRenderer} from './renderers/document-object/remark';
+import {DocumentObjectSolutionRenderer} from './renderers/document-object/solution';
 import {DocumentObjectTableRenderer} from './renderers/document-object/table';
 import {DocumentObjectTheoremRenderer} from './renderers/document-object/theorem';
+import {DocumentObjectWarningRenderer} from './renderers/document-object/warning';
 import {DefaultDocumentPartRenderer} from './renderers/document-part/default';
 import {DocumentPartH1Renderer} from './renderers/document-part/h1';
 import {DocumentPartH2Renderer} from './renderers/document-part/h2';
@@ -58,16 +63,21 @@ export function registerTemplateRenderers(): void {
     rendererRegistry.setRenderer(new DocumentPartH3Renderer());
 
     rendererRegistry.setRenderer(new DefaultDocumentObjectRenderer());
+    rendererRegistry.setRenderer(new DocumentObjectAlgorithmRenderer());
     rendererRegistry.setRenderer(new DocumentObjectDefinitionRenderer());
     rendererRegistry.setRenderer(new DocumentObjectCorollaryRenderer());
     rendererRegistry.setRenderer(new DocumentObjectLemmaRenderer());
+    rendererRegistry.setRenderer(new DocumentObjectObservationRenderer());
+    rendererRegistry.setRenderer(new DocumentObjectPropositionRenderer());
     rendererRegistry.setRenderer(new DocumentObjectTheoremRenderer());
     rendererRegistry.setRenderer(new DocumentObjectProofRenderer());
     rendererRegistry.setRenderer(new DocumentObjectRemarkRenderer());
     rendererRegistry.setRenderer(new DocumentObjectExampleRenderer());
     rendererRegistry.setRenderer(new DocumentObjectFigureRenderer());
     rendererRegistry.setRenderer(new DocumentObjectQuestionRenderer());
+    rendererRegistry.setRenderer(new DocumentObjectSolutionRenderer());
     rendererRegistry.setRenderer(new DocumentObjectTableRenderer());
+    rendererRegistry.setRenderer(new DocumentObjectWarningRenderer());
 
     rendererRegistry.setRenderer(new DefaultOuterEnvRenderer());
     rendererRegistry.setRenderer(new OuterEnvAlignMathRenderer());

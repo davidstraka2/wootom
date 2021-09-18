@@ -31,6 +31,18 @@
 
   # Objects
 
+  'Algorithm':
+    'prefix': 'alg'
+    'body': """
+    .Algorithm:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
   'Definition':
     'prefix': 'def'
     'body': """
@@ -59,6 +71,30 @@
     'prefix': 'lem'
     'body': """
     .Lemma:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Observation':
+    'prefix': 'obs'
+    'body': """
+    .Observation:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Proposition':
+    'prefix': 'propo'
+    'body': """
+    .Proposition:
       title: $1
       label: $2
       index: $3
@@ -140,6 +176,18 @@
 
     """
 
+  'Solution':
+    'prefix': 'sol'
+    'body': """
+    .Solution:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
   'Table':
     'prefix': 'tabl'
     'body': """
@@ -153,6 +201,18 @@
       .caption:
 
         $3
+
+    """
+
+  'Warning':
+    'prefix': 'warn'
+    'body': """
+    .Warning:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
 
     """
 
@@ -251,8 +311,8 @@
 
     """
 
-  'Solution':
-    'prefix': 'sol'
+  'Solution (outer env)':
+    'prefix': 'solu'
     'body': """
     .solution:
 
