@@ -1,20 +1,14 @@
-import {ASTNode} from '../../../core/ast/ast-node';
 import {Renderer} from '../../../core/rendering/renderer';
-import {RenderingManager} from '../../../core/rendering/rendering-manager';
-import {infoBlockComponent} from '../../../util/html-components/info-block';
-import {WooElementKind} from '../../../util/types/woo';
+import {BasicObjectRenderer} from './basic-object';
 
-export class DocumentObjectRemarkRenderer implements Renderer {
-    readonly kind: WooElementKind = 'DocumentObject';
+/** Renderer of the remark document object */
+export class DocumentObjectRemarkRenderer
+    extends BasicObjectRenderer
+    implements Renderer {
     readonly abstractVariant = 'remark';
 
-    render(renderingManager: RenderingManager, astNode: ASTNode): Node {
-        let title = 'Remark';
-        const titleMetadata = astNode.getMetadata('title');
-        if (typeof titleMetadata === 'string') title += `: ${titleMetadata}`;
-        return infoBlockComponent({
-            title,
-            children: [renderingManager.render(...astNode.children)],
-        });
-    }
+    /** @override */
+    protected title = 'Remark';
+    /** @override */
+    protected hasOptionalMetaTitle = true;
 }

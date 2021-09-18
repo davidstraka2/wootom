@@ -1,20 +1,14 @@
-import {ASTNode} from '../../../core/ast/ast-node';
 import {Renderer} from '../../../core/rendering/renderer';
-import {RenderingManager} from '../../../core/rendering/rendering-manager';
-import {infoBlockComponent} from '../../../util/html-components/info-block';
-import {WooElementKind} from '../../../util/types/woo';
+import {BasicObjectRenderer} from './basic-object';
 
-export class DocumentObjectCorollaryRenderer implements Renderer {
-    readonly kind: WooElementKind = 'DocumentObject';
+/** Renderer of the corollary document object */
+export class DocumentObjectCorollaryRenderer
+    extends BasicObjectRenderer
+    implements Renderer {
     readonly abstractVariant = 'corollary';
 
-    render(renderingManager: RenderingManager, astNode: ASTNode): Node {
-        let title = 'Corollary';
-        const titleMetadata = astNode.getMetadata('title');
-        if (typeof titleMetadata === 'string') title += `: ${titleMetadata}`;
-        return infoBlockComponent({
-            title,
-            children: [renderingManager.render(...astNode.children)],
-        });
-    }
+    /** @override */
+    protected title = 'Corollary';
+    /** @override */
+    protected hasOptionalMetaTitle = true;
 }

@@ -1,20 +1,14 @@
-import {ASTNode} from '../../../core/ast/ast-node';
 import {Renderer} from '../../../core/rendering/renderer';
-import {RenderingManager} from '../../../core/rendering/rendering-manager';
-import {infoBlockComponent} from '../../../util/html-components/info-block';
-import {WooElementKind} from '../../../util/types/woo';
+import {BasicObjectRenderer} from './basic-object';
 
-export class DocumentObjectProofRenderer implements Renderer {
-    readonly kind: WooElementKind = 'DocumentObject';
+/** Renderer of the proof document object */
+export class DocumentObjectProofRenderer
+    extends BasicObjectRenderer
+    implements Renderer {
     readonly abstractVariant = 'proof';
 
-    render(renderingManager: RenderingManager, astNode: ASTNode): Node {
-        let title = 'Proof';
-        const titleMetadata = astNode.getMetadata('title');
-        if (typeof titleMetadata === 'string') title += `: ${titleMetadata}`;
-        return infoBlockComponent({
-            title,
-            children: [renderingManager.render(...astNode.children)],
-        });
-    }
+    /** @override */
+    protected title = 'Proof';
+    /** @override */
+    protected hasOptionalMetaTitle = true;
 }

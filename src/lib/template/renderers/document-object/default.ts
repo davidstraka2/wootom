@@ -5,6 +5,7 @@ import {RenderingManager} from '../../../core/rendering/rendering-manager';
 import {errorBlockComponent} from '../../../util/html-components/error-block';
 import {WooElementKind} from '../../../util/types/woo';
 
+/** Default renderer of document objects */
 export class DefaultDocumentObjectRenderer implements Renderer {
     readonly kind: WooElementKind = 'DocumentObject';
 
