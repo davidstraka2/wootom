@@ -24,14 +24,15 @@ export function registerTemplateVariants(): void {
     variantRegistry.setVariant('OuterEnv', 'align', 'align-math');
     variantRegistry.setVariant('OuterEnv', 'caption', 'caption');
     variantRegistry.setVariant('OuterEnv', 'codeblock', 'codeblock');
-    variantRegistry.setVariant('OuterEnv', 'enumerate', 'enumerate'); // TODO
+    variantRegistry.setVariant('OuterEnv', 'enumerate', 'enumerate');
     variantRegistry.setVariant('OuterEnv', 'equation', 'block-math');
     variantRegistry.setVariant('OuterEnv', 'gather', 'gather-math');
     variantRegistry.setVariant('OuterEnv', 'sage', 'sage');
     variantRegistry.setVariant('OuterEnv', 'tabular', 'tabular');
     variantRegistry.setVariant('OuterEnv', 'tikz', 'tikz');
     variantRegistry.setVariant('OuterEnv', 'image', 'image'); // TODO
-    variantRegistry.setVariant('OuterEnv', 'itemize', 'itemize'); // TODO
+    variantRegistry.setVariant('OuterEnv', 'itemize', 'itemize');
+    variantRegistry.setVariant('OuterEnv', 'item', 'item');
     variantRegistry.setVariant('OuterEnv', 'quote', 'quote');
 
     variantRegistry.setVariant('InnerEnv', 'cite', 'cite');
