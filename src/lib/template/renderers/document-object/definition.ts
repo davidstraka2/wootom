@@ -1,4 +1,5 @@
 import {Renderer} from '../../../core/rendering/renderer';
+import {InfoBlockColors} from '../../../util/lists/styles';
 import {BasicObjectRenderer} from './basic-object';
 
 /** Renderer of the definition document object */
@@ -11,4 +12,6 @@ export class DocumentObjectDefinitionRenderer
     protected title = 'Definition';
     /** @override */
     protected hasOptionalMetaTitle = true;
+    /** @override */
+    protected titleBackgroundColor = InfoBlockColors.Green;
 }

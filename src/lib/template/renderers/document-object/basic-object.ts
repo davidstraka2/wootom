@@ -15,11 +15,13 @@ export abstract class BasicObjectRenderer
      * Whether the document object can optionally have the title metablock item
      */
     protected hasOptionalMetaTitle = false;
+    protected titleBackgroundColor?: string;
 
     render(renderingManager: RenderingManager, astNode: ASTNode): Node {
         return infoBlockComponent({
             title: this.customizeTitle(this.title, astNode),
             children: [renderingManager.render(...astNode.children)],
+            titleBackgroundColor: this.titleBackgroundColor,
         });
     }
 
