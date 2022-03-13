@@ -26,4 +26,10 @@ export declare const config: {
             description: string;
         }[];
     };
+    updateOnType: {
+        title: string;
+        description: string;
+        type: string;
+        default: boolean;
+    };
 };

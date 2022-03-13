@@ -31,6 +31,18 @@
 
   # Objects
 
+  'Algorithm':
+    'prefix': 'alg'
+    'body': """
+    .Algorithm:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
   'Definition':
     'prefix': 'def'
     'body': """
@@ -59,6 +71,30 @@
     'prefix': 'lem'
     'body': """
     .Lemma:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Observation':
+    'prefix': 'obs'
+    'body': """
+    .Observation:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
+
+    """
+
+  'Proposition':
+    'prefix': 'propo'
+    'body': """
+    .Proposition:
       title: $1
       label: $2
       index: $3
@@ -131,12 +167,21 @@
     'prefix': 'que'
     'body': """
     .Question:
+      solution: $1
 
-      $1
+      $2
 
-      .solution:
+    """
 
-        $2
+  'Solution':
+    'prefix': 'sol'
+    'body': """
+    .Solution:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
 
     """
 
@@ -153,6 +198,18 @@
       .caption:
 
         $3
+
+    """
+
+  'Warning':
+    'prefix': 'warn'
+    'body': """
+    .Warning:
+      title: $1
+      label: $2
+      index: $3
+
+      $4
 
     """
 
@@ -206,6 +263,15 @@
 
     """
 
+  'Gather':
+    'prefix': 'gat'
+    'body': """
+    .gather:
+
+      $1
+
+    """
+
   'Image':
     'prefix': 'img'
     'body': """
@@ -237,15 +303,6 @@
     'prefix': 'sage'
     'body': """
     !sage:
-
-      $1
-
-    """
-
-  'Solution':
-    'prefix': 'sol'
-    'body': """
-    .solution:
 
       $1
 
@@ -331,8 +388,20 @@
     .reference:$1
     """
 
+  'Small':
+    'prefix': 'sma'
+    'body': """
+    "$1".small
+    """
+
   'Todo':
     'prefix': 'tod'
     'body': """
     "$1".todo
+    """
+
+  'Underline':
+    'prefix': 'u'
+    'body': """
+    "$1".underline
     """

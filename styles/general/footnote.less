@@ -1,0 +1,25 @@
+@import 'ui-variables';
+
+.wootom-html-viewer {
+    .wootom-footnote {
+        color: @text-color-subtle;
+
+        &:hover {
+            color: @text-color-selected;
+        }
+
+        &:not(.wootom-footnote-shown) > *:not(.wootom-footnote-controls) {
+            display: none;
+        }
+
+        > .wootom-footnote-controls::before {
+            content: '(*\00a0▷)';
+            cursor: pointer;
+        }
+
+        &.wootom-footnote-shown > .wootom-footnote-controls::before {
+            content: '(*\00a0◁)';
+            margin-right: 0.5em;
+        }
+    }
+}

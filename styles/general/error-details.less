@@ -1,0 +1,23 @@
+@import 'ui-variables';
+
+.wootom-html-viewer {
+    details.wootom-error-details {
+        border-radius: @component-border-radius;
+
+        > summary {
+            background-color: @background-color-error;
+            border-radius: @component-border-radius;
+            color: @text-color-highlight;
+            cursor: pointer;
+        }
+
+        &[open] {
+            border: 1px solid @background-color-error;
+
+            > summary {
+                border-radius: @component-border-radius @component-border-radius
+                    0 0;
+            }
+        }
+    }
+}

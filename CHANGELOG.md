@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] (2022-03-13)
+
+### Added
+
+-   New document objects: `.Algorithm`, `.Observation`, `.Proposition`, `.Solution`, and `.Warning` [[#51]]
+-   New inner environments: `.item`, `.small`, and `.underline` [[#46], [#50], [#52]]
+-   New outer environments: `.enumerate`, `.gather`, and `.itemize` [[#46], [#50], [#52]]
+-   Optionally update HTML preview and navigation only upon saving the file (not upon type) [[#45]]
+-   Rendering of the `star` metablock item on the `.Example` document object [[#51]]
+
+### Changed
+
+-   Replaced the deprecated `.solution` outer environment with the new `solution` metablock item (newly available on the `.Question` document object) [[#51]]
+-   Tweaked and refactored stylesheets (most notable tweaks: colored document object titles, more subtle footnotes) [[#48], [#53]]
+
+### Removed
+
+-   Support for the `title` metablock item on the `.Question` document object [[#51]]
+
+### Chores
+
+-   Added the `clean` script [[#49]]
+
 ## [0.6.1] (2021-06-24)
 
 ### Changed
@@ -126,6 +149,7 @@ and this project adheres to
 -   Set up linting with ESLint (and typescript-eslint/eslint-plugin) [[#10]]
 -   Set up CI using GitHub Actions [[#6], [#7], [#9], [#11]]
 
+[0.7.0]: https://github.com/davidstraka2/wootom/compare/v0.6.1-src...v0.7.0-src
 [0.6.1]: https://github.com/davidstraka2/wootom/compare/v0.6.0-src...v0.6.1-src
 [0.6.0]: https://github.com/davidstraka2/wootom/compare/v0.5.0-src...v0.6.0-src
 [0.5.0]: https://github.com/davidstraka2/wootom/compare/v0.4.0-src...v0.5.0-src
@@ -133,6 +157,13 @@ and this project adheres to
 [0.3.0]: https://github.com/davidstraka2/wootom/compare/v0.2.0-src...v0.3.0-src
 [0.2.0]: https://github.com/davidstraka2/wootom/compare/v0.1.0-src...v0.2.0-src
 [0.1.0]: https://github.com/davidstraka2/wootom/releases/tag/v0.1.0-src
+[#53]: https://github.com/davidstraka2/wootom/issues/53
+[#52]: https://github.com/davidstraka2/wootom/pull/52
+[#51]: https://github.com/davidstraka2/wootom/issues/51
+[#50]: https://github.com/davidstraka2/wootom/issues/50
+[#49]: https://github.com/davidstraka2/wootom/issues/49
+[#46]: https://github.com/davidstraka2/wootom/issues/46
+[#45]: https://github.com/davidstraka2/wootom/issues/45
 [#42]: https://github.com/davidstraka2/wootom/issues/42
 [#41]: https://github.com/davidstraka2/wootom/issues/41
 [#39]: https://github.com/davidstraka2/wootom/issues/39

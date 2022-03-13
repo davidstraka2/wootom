@@ -1,9 +1,10 @@
-import { ASTNode } from '../../../core/ast/ast-node';
 import { Renderer } from '../../../core/rendering/renderer';
-import { RenderingManager } from '../../../core/rendering/rendering-manager';
-import { WooElementKind } from '../../../util/types/woo';
-export declare class DocumentObjectTableRenderer implements Renderer {
-    readonly kind: WooElementKind;
+import { BasicObjectRenderer } from './basic-object';
+/** Renderer of the table document object */
+export declare class DocumentObjectTableRenderer extends BasicObjectRenderer implements Renderer {
     readonly abstractVariant = "table";
-    render(renderingManager: RenderingManager, astNode: ASTNode): Node;
+    /** @override */
+    protected title: string;
+    /** @override */
+    protected hasOptionalMetaTitle: boolean;
 }

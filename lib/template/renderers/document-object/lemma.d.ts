@@ -1,9 +1,13 @@
-import { ASTNode } from '../../../core/ast/ast-node';
 import { Renderer } from '../../../core/rendering/renderer';
-import { RenderingManager } from '../../../core/rendering/rendering-manager';
-import { WooElementKind } from '../../../util/types/woo';
-export declare class DocumentObjectLemmaRenderer implements Renderer {
-    readonly kind: WooElementKind;
+import { InfoBlockColors } from '../../../util/lists/styles';
+import { BasicObjectRenderer } from './basic-object';
+/** Renderer of the lemma document object */
+export declare class DocumentObjectLemmaRenderer extends BasicObjectRenderer implements Renderer {
     readonly abstractVariant = "lemma";
-    render(renderingManager: RenderingManager, astNode: ASTNode): Node;
+    /** @override */
+    protected title: string;
+    /** @override */
+    protected hasOptionalMetaTitle: boolean;
+    /** @override */
+    protected titleBackgroundColor: InfoBlockColors;
 }

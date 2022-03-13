@@ -1,112 +1,21 @@
-.wootom-html-viewer {
-    --color-translucent-red: rgba(255, 0, 0, 0.4);
-    --color-translucent-blue: rgba(55, 106, 247, 0.4);
-    --color-translucent-yellow: rgba(255, 255, 0, 0.4);
-    --color-white: #fff;
+@import 'general/blocks.less';
+@import 'general/caption.less';
+@import 'general/error-details.less';
+@import 'general/error-inline.less';
+@import 'general/figure.less';
+@import 'general/footnote.less';
+@import 'general/tikz.less';
+@import 'navigation/lists.less';
+@import 'navigation/search.less';
 
+.wootom-html-viewer {
     padding: 1rem;
 
-    .wootom-error-block {
-        border: 1px solid var(--color-translucent-red);
-        margin: 0.5rem 0;
-
-        > * {
-            padding: 0.35rem 1rem;
-        }
-
-        > .wootom-title {
-            background-color: var(--color-translucent-red);
-            margin: 0;
-        }
+    p:last-child {
+        margin-bottom: 0;
     }
 
-    .wootom-error-inline {
-        background-color: var(--color-translucent-red);
-        margin: 0 0.5em;
-        padding: 0 0.5em;
-    }
-
-    .wootom-info-block {
-        border: 1px solid var(--color-translucent-blue);
-        margin: 0.5rem 0;
-
-        > * {
-            padding: 0.35rem 1rem;
-        }
-
-        > .wootom-title {
-            background-color: var(--color-translucent-blue);
-            margin: 0;
-        }
-    }
-
-    .wootom-caption {
-        text-align: center;
-    }
-
-    .wootom-figure {
-        text-align: center;
-
-        > span {
-            display: inline-block;
-            margin: 0 1rem;
-        }
-
-        pre {
-            text-align: left;
-        }
-    }
-
-    details.wootom-error-details {
-        border: 1px solid var(--color-translucent-red);
-
-        > summary {
-            background-color: var(--color-translucent-red);
-            cursor: pointer;
-        }
-    }
-
-    svg.wootom-tikz {
-        &.wootom-tikz-inverted {
-            filter: invert(1);
-        }
-
-        &.wootom-tikz-whiteboard {
-            background-color: var(--color-white);
-        }
-    }
-
-    .wootom-navigation {
-        ol {
-            padding-inline-start: 2em;
-        }
-
-        input.wootom-search {
-            background: transparent;
-            border-radius: 25px;
-            border-style: solid;
-            border-width: 1px;
-            padding: 0 1rem;
-            min-width: 5rem;
-            width: 100%;
-        }
-    }
-
-    .wootom-footnote {
-        background-color: var(--color-translucent-yellow);
-
-        &:not(.wootom-footnote-shown) > *:not(.wootom-footnote-controls) {
-            display: none;
-        }
-
-        > .wootom-footnote-controls::before {
-            content: '(*\00a0▷)';
-            cursor: pointer;
-        }
-
-        &.wootom-footnote-shown > .wootom-footnote-controls::before {
-            content: '(*\00a0◁)';
-            margin-right: 0.5em;
-        }
+    pre:not(:last-child) {
+        margin-bottom: 1em;
     }
 }

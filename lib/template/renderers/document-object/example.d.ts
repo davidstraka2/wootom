@@ -1,9 +1,16 @@
 import { ASTNode } from '../../../core/ast/ast-node';
 import { Renderer } from '../../../core/rendering/renderer';
-import { RenderingManager } from '../../../core/rendering/rendering-manager';
-import { WooElementKind } from '../../../util/types/woo';
-export declare class DocumentObjectExampleRenderer implements Renderer {
-    readonly kind: WooElementKind;
+import { InfoBlockColors } from '../../../util/lists/styles';
+import { BasicObjectRenderer } from './basic-object';
+/** Renderer of the example document object */
+export declare class DocumentObjectExampleRenderer extends BasicObjectRenderer implements Renderer {
     readonly abstractVariant = "example";
-    render(renderingManager: RenderingManager, astNode: ASTNode): Node;
+    /** @override */
+    protected title: string;
+    /** @override */
+    protected hasOptionalMetaTitle: boolean;
+    /** @override */
+    protected titleBackgroundColor: InfoBlockColors;
+    protected customizeTitle(title: string, astNode: ASTNode): string;
+    private starTitle;
 }

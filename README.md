@@ -49,6 +49,7 @@ mentioned dependencies.
 
 -   `npm test` - Run package tests
 -   `npm run build` - Build
+-   `npm run clean` - Clean up build output
 -   `npm run format:check` - Check formatting
 -   `npm run format:fix` - Fix formatting
 -   `npm run lint:check` - Lint

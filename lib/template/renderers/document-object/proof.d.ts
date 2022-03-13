@@ -1,9 +1,10 @@
-import { ASTNode } from '../../../core/ast/ast-node';
 import { Renderer } from '../../../core/rendering/renderer';
-import { RenderingManager } from '../../../core/rendering/rendering-manager';
-import { WooElementKind } from '../../../util/types/woo';
-export declare class DocumentObjectProofRenderer implements Renderer {
-    readonly kind: WooElementKind;
+import { BasicObjectRenderer } from './basic-object';
+/** Renderer of the proof document object */
+export declare class DocumentObjectProofRenderer extends BasicObjectRenderer implements Renderer {
     readonly abstractVariant = "proof";
-    render(renderingManager: RenderingManager, astNode: ASTNode): Node;
+    /** @override */
+    protected title: string;
+    /** @override */
+    protected hasOptionalMetaTitle: boolean;
 }
